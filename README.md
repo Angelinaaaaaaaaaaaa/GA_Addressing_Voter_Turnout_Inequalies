@@ -1,121 +1,82 @@
-typescript next.js starter kit for leaflet-react
-===============
+# **Capstone Report: Addressing Voter Turnout Disparities through Data-Driven Resource Allocation**
 
-An extensible [next.js](https://nextjs.org/) starter kit archived with the [leaflet-react](https://react-leaflet.js.org/) map plugin. Template visually enhanced by [tailwind](https://tailwindcss.com/) and [lucide icons](https://lucide.dev/). ✨
-Setup with [typescript](https://www.typescriptlang.org/) 👐.
+## **📌 Overview**
+This repository contains the implementation for our capstone project, which focuses on addressing voter turnout disparities using **Structural Causal Models (SCMs)** and **Mixed Integer Programming (MIP)**. We optimize polling station placement in Georgia with the dual objectives of:
+1. **Maximizing overall voter turnout**  
+2. **Reducing racial disparities in voting accessibility**  
 
-Packed with useful components and hooks for using the map and create UI elements for next(.js) mapping projects.
+The project leverages **public election data**, **census demographics**, and **fairness constraints** to identify equitable polling station allocations. Our methodology quantifies the impact of interventions on turnout rates and ensures resources are allocated to communities with the greatest need.
 
-### Table of Contents
-1. [Features](#features)
-2. [Getting started](#getting-started)
-    1. [Breaking Changes](#breaking-changes)
-    2. [Clone & Deploy with Github and Vercel](#clone-deploy)
-    3. [Manual install](#manual-install)
-3. [Start up](#start-up)
-4. [Coming up (probably)](#coming-up)
-6. [Remove / change linting rules](#disable-lint)
-7. [WebGL?](#web-gl)
-7. [No typescript?](#no-ts)
+---
 
-### <a id="features"></a> 🎇 Features
+## **🚀 Features**
+- ✅ **Data-driven polling station optimization**  
+- 🔍 **Structural Causal Models (SCMs) for intervention evaluation**  
+- 🏛 **Mixed Integer Programming (MIP) for optimal resource allocation**  
+- ⚖️ **Fairness constraints to mitigate racial and socioeconomic disparities**  
+- 📊 **Publicly available datasets for replication and analysis**  
 
-- 🏇 mighty next.js 14 leaflet-react setup
-- 😏 typescript + strict lint setup
-- 🔗 next.js ready route nav module
-- 🌤 modular demo content
-- 🐛 custom marker icons
-- 📄 custom marker popups
-- 📚 marker categories
-- 🫧 marker cluster by category with matching icon+color and notification bubble with marker count
-- ⚓️ custom hooks for getting marker data and map context (thx [Flo301](https://github.com/Flo301))
-- 🏡 custom ui components (locate me, center on markers)
+---
 
-### <a id="getting-started"></a> 🏎 Getting Started
+## **📥 Getting Started**
 
-#### <a id="breaking-changes"></a> 💣 Breaking Changes introduced > v0.1.1
-
-In Version v0.1.2, I changed the path aliases to be more consistent with the ES standards from `@alias` to `#alias`. If pulling the template from v0.1.1 you have to change the import paths in your components and pages.
-
-```diff
-- import { SomeComponent } from '@components/useMap'
-+ import { SomeComponent } from '#components/useMap'
-```
-
-#### <a id="clone-deploy"></a> ⛴ Clone & Deploy with Github and Vercel
-
-Create new Github repo with vercel and deploy it within minutes. Could not be easier as hitting some buttons. Shipping of private repos is possible.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Frichard-unterberg%2Fnext-leaflet-starter-typescript)
-
-Later: Check out your repo locally and run ```npm install``` or ```yarn``` in root
-
-Follow Instructions for [Starting Up](#start-up)
-
-#### <a id="manual-install"></a> ⚙️ Manual install
+### **1️⃣ Install Dependencies**
+Before running the project, ensure you have **Node.js** installed. Then, install the required dependencies using:
 
 ```bash
-git clone https://github.com/richard-unterberg/next-leaflet-starter-typescript
-# then
 npm install
-# or
-yarn
 ```
 
-### <a id="start-up"></a> 🏍️ Start up
+---
 
-According the official [Next.js Docs](https://nextjs.org/docs/getting-started):
-
-Run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Building with type checking and linting
+### **2️⃣ Build the Project**
+Compile the project using:
 
 ```bash
 npm run build
-# or
-yarn build
 ```
 
-Start build locally
+This step ensures all required assets and configurations are correctly set up.
+
+---
+
+### **3️⃣ Start the Application**
+Run the application locally:
 
 ```bash
-npm run start
-# or
-yarn start
+npm start
 ```
 
-### <a id="coming-up"></a> 📊 Upcoming (probably)
+This will launch the project and allow you to interact with the dataset and model results.
 
-+ redesign zoom in / zoom out
-+ atom components for map ui
-+ fix error when setting new coordinates in hot reload "Map container is already initialized."
-+ breakpoint hook synced with tailwind breakpoint which is usable in js
-+ multiple map instances per page
-  + not possible atm since we read the map instance directly from window object 🤫
-+ add axios for fetching data
-  + move simulated "endpoint" (Places) to public folder and convert to JSON
+---
 
-- **Feel free to contribute!** 🤗
+## **📊 Dataset**
+The dataset includes **2020 Georgia election data** along with **demographic and socioeconomic indicators** to assess disparities in polling station distribution. Key features include:
+- 🗳 **Polling Station Accessibility**: Ratio of polling stations to the eligible voting population
+- 📈 **Voter Turnout Rates**: By race and gender groups
+- 💰 **Socioeconomic Indicators**: Unemployment rate, campaign contributions, and social engagement metrics (e.g., election-related tweets)
+- 🌍 **Geographic Data**: County-level neighborhood distance matrix for estimating the impact of nearby counties
 
-### <a id="disable-lint"></a> 🤯 How to remove those  linting rules?
+We model **polling station allocation** as an **integer programming problem**, identifying areas below the state-wide polling station average for targeted intervention.
 
-You can adjust the settings mainly in ```eslint.json``` and ```tsconfig.json```.
+---
 
-I've been using them a lot on my dayjob and I can't be anymore without them. 🥲
+## **📌 Upcoming Features**
+- 📍 **Redesign zoom in / zoom out features**  
+- 🎨 **Modular UI components for interactive data visualization**  
+- 📈 **Improved fairness constraints in resource allocation**  
+- 🌎 **Multiple map instances per page for comparative analysis**  
+- 📊 **Integration of Axios for dynamic data fetching**  
 
-### <a id="web-gl"></a> 👽 Web GL based mapping project
+---
 
-Leafleft, graphic-based tile rendering or rasterized zoom levels are not smooth enough and you are in for crazy fast WebGL mapping? Here's my [maplibre next.js ts starter kit](https://github.com/richard-unterberg/maplibre-nextjs-ts-starter)
+## **🤝 Contributing**
+We welcome contributions! Feel free to open issues, suggest improvements, or submit pull requests to help refine the model and enhance fairness in voter accessibility.
 
-### <a id="no-ts"></a> 📝 Don't wanna use typscript at all?
+---
 
-See this nice javascript implementation - This repo is heavily inspired by this one:
-https://github.com/colbyfayock/next-leaflet-starter
+## **📜 License**
+This project is licensed under the **MIT License**.
 
-Happy coding! ✌️👽
+Happy coding! ✌️
