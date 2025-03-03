@@ -3,13 +3,28 @@
 @tailwind utilities;
 
 /* Global Styles */
+:root {
+  --color-primary: #6d28d9;
+  --color-primary-dark: #4c1d95;
+  --color-background: #9ea1d4;
+  --color-text: #2d3748;
+}
+
 body {
-  background-color: #9ea1d4; /* Equality-themed background color */
-  color: #2d3748; /* Default text color (black) */
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', sans-serif;
-  line-height: 1.6;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+h1, h2, h3, h4 {
+  color: var(--color-primary-dark);
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
 }
 
 .container {
@@ -71,7 +86,7 @@ li {
 /* Leaflet Custom Styling */
 .leaflet-container {
   border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Utility Classes */

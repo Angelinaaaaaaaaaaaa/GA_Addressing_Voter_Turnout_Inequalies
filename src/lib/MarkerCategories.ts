@@ -38,4 +38,16 @@ const MarkerCategories: MarkerCategoryType = {
   },
 }
 
+export const getCategoryName = (category: Category): string => {
+  return MarkerCategories[category].name
+}
+
+export const getCategoryColor = (category: Category): string => {
+  return MarkerCategories[category].color
+}
+
+export const getCategoryIcon = (category: Category): FunctionComponent<LucideProps> => {
+  return MarkerCategories[category].icon
+}
+
 export default MarkerCategories

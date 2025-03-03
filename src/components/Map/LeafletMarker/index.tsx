@@ -27,8 +27,12 @@ export const CustomMarker = ({ place }: CustomMarkerProps) => {
 
   const handleMarkerClick = useCallback(() => {
     if (!map) return
-    const clampZoom = map.getZoom() < 14 ? 14 : undefined
-    map.setView(place.position, clampZoom)
+    const currentZoom = map.getZoom()
+    const clampZoom = currentZoom < 14 ? 14 : currentZoom
+    map.setView(place.position, clampZoom, {
+      animate: true,
+      duration: 0.5
+    })
   }, [map, place.position])
 
   // some event for the inner popup cta

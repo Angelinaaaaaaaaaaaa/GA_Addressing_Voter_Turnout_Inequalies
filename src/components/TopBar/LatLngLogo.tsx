@@ -19,9 +19,14 @@ const LatLngLogo = () => {
       setLocation(map.getCenter())
     })
 
-    // cleanup
+    const handleMove = () => {
+      setLocation(map.getCenter())
+    }
+
+    map.on('move', handleMove)
+
     return () => {
-      map.off()
+      map.off('move', handleMove)
     }
   }, [map])
 
