@@ -5,15 +5,11 @@ import NavMenu from '../common/NavMenu'
 
 const MapTopBar = () => (
   <div
-    className="absolute left-0 top-0 flex h-20 w-full items-center bg-dark p-3 shadow"
+    className="absolute left-0 top-0 flex h-8 w-full items-center justify-between bg-gray-900/90 px-4 backdrop-blur-sm"
     style={{ zIndex: 1000 }}
   >
-    <div className="flex w-full justify-between">
-      <LatLngLogo />
-      <div className="flex flex-col justify-center">
-        <NavMenu variant={NavMenuVariant.TOPNAV} />
-      </div>
-    </div>
+    <LatLngLogo />
+    <NavMenu variant={NavMenuVariant.TOPNAV} />
   </div>
 )
 

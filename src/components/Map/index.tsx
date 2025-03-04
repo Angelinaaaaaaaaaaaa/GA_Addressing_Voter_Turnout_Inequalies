@@ -1,7 +1,8 @@
 import Leaflet from 'leaflet'
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
+import debounce from 'lodash/debounce'
 
 import MapTopBar from '#components/TopBar'
 import { AppConfig } from '#lib/AppConfig'
@@ -11,6 +12,7 @@ import { Places, PlacesType } from '#lib/Places'
 import LeafleftMapContextProvider from './LeafletMapContextProvider'
 import useMapContext from './useMapContext'
 import useMarkerData from './useMarkerData'
+import MapLegend from './ui/MapLegend'
 
 const LeafletCluster = dynamic(async () => (await import('./LeafletCluster')).LeafletCluster(), {
   ssr: false,
@@ -57,8 +59,6 @@ interface MapProps {
 
 const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
   const { map } = useMapContext()
-
-  // we can use this to modify our query for locations
   const [viewState, setViewState] = useState(getViewState(map))
 
   const {
@@ -70,22 +70,29 @@ const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
     refreshRate: 200,
   })
 
-  // you will need some kind middleware which process markers within the bounding box in viewState
+  // Debounced view state update
+  const handleMapMoveEnd = useCallback(
+    debounce(() => {
+      setViewState(getViewState(map))
+    }, 250),
+    [map]
+  )
+
   const markerQueryResponse = Places as PlacesType | undefined
+  if (!markerQueryResponse) {
+    console.warn('Places data is undefined')
+  }
 
   useEffect(() => {
     if (!map) return undefined
 
-    // you should debounce that by only changing when the map stops moving
-    map?.on('moveend', () => {
-      setViewState(getViewState(map))
-    })
+    map.on('moveend', handleMapMoveEnd)
 
-    // cleanup
     return () => {
-      map.off()
+      map.off('moveend', handleMapMoveEnd)
+      handleMapMoveEnd.cancel()
     }
-  }, [map])
+  }, [map, handleMapMoveEnd])
 
   const { clustersByCategory, allMarkersBoundCenter } = useMarkerData({
     locations: markerQueryResponse,
@@ -123,7 +130,7 @@ const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
     >
       <MapTopBar />
       <div
-        className={`absolute left-0 w-full transition-opacity ${isLoading ? 'opacity-0' : 'opacity-1 '}`}
+        className={`absolute left-0 w-full transition-opacity ${isLoading ? 'opacity-0' : 'opacity-100'}`}
         style={{
           top: AppConfig.ui.topBarHeight,
           width: viewportWidth ?? '100%',
@@ -131,7 +138,7 @@ const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
         }}
       >
         {allMarkersBoundCenter && clustersByCategory && (
-          <div style={{ height: '100%', width: '100%' }}>
+          <div className="h-full w-full">
             <LeafletMapContainer
               center={allMarkersBoundCenter.centerPos}
               zoom={allMarkersBoundCenter.minZoom}
@@ -145,22 +152,24 @@ const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
                     zoom={allMarkersBoundCenter.minZoom}
                   />
                   <LocateButton />
-                  {Object.entries(clustersByCategory).map(([category, markers]) => (
-                    <LeafletCluster
-                      key={category}
-                      icon={MarkerCategories[Number(category) as Category].icon}
-                      color={MarkerCategories[Number(category) as Category].color}
-                      chunkedLoading
-                    >
-                      {markers.map((marker: PlacesType[number]) => (
-                        <CustomMarker place={marker} key={marker.id} />
-                      ))}
-                    </LeafletCluster>
-                  ))}
+                  {Object.entries(clustersByCategory).map(([categoryStr, markers]) => {
+                    const category = Number(categoryStr) as Category;
+                    return (
+                      <LeafletCluster
+                        key={category}
+                        icon={MarkerCategories[category].icon}
+                        color={MarkerCategories[category].color}
+                        chunkedLoading
+                      >
+                        {markers.map((marker) => (
+                          <CustomMarker place={marker} key={marker.id} />
+                        ))}
+                      </LeafletCluster>
+                    );
+                  })}
+                  <MapLegend />
                 </>
               ) : (
-                // we have to spawn at least one element to keep it happy
-                // eslint-disable-next-line react/jsx-no-useless-fragment
                 <></>
               )}
             </LeafletMapContainer>

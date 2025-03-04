@@ -1,5 +1,4 @@
-import { Compass, Github, Home, Map } from 'lucide-react'
-
+import { Github, Home, Map } from 'lucide-react'
 import { AppConfig, NavMenuVariant } from '#lib/AppConfig'
 
 import NavMenuItem from './NavMenuItem'
@@ -14,20 +13,30 @@ const NavMenu = ({ variant = NavMenuVariant.INTRO }: NavMenuProps) => {
 
   const listStyle =
     variant === NavMenuVariant.TOPNAV
-      ? `flex text-white gap-4 text-lg text-white text-sm md:text-base`
-      : `flex flex-col justify-between gap-1 w-fit text-primary`
+      ? 'flex h-full items-center gap-4'
+      : 'flex flex-col justify-between gap-1 w-fit'
 
   return (
-    <ul className={`${listStyle}`}>
-      <NavMenuItem href="/" label="Intro" icon={<Home size={navIconSize} />} />
-      <NavMenuItem href="/map" label="Map" icon={<Map size={navIconSize} />} />
-      <NavMenuItem
-        href="https://github.com/Angelinaaaaaaaaaaaa/GA_Addressing_Voter_Turnout_Inequalies"
-        label="Github"
-        icon={<Github size={navIconSize} />}
-        external
-      />
-    </ul>
+    <nav className="h-full">
+      <ul className={listStyle}>
+        <NavMenuItem 
+          href="/" 
+          label="Intro" 
+          icon={<Home size={navIconSize} className="text-purple-400 hover:text-purple-300" />} 
+        />
+        <NavMenuItem 
+          href="/map" 
+          label="Map" 
+          icon={<Map size={navIconSize} className="text-purple-400 hover:text-purple-300" />} 
+        />
+        <NavMenuItem
+          href="https://github.com/Angelinaaaaaaaaaaaa/GA_Addressing_Voter_Turnout_Inequalies"
+          label="Github"
+          icon={<Github size={navIconSize} className="text-purple-400 hover:text-purple-300" />}
+          external
+        />
+      </ul>
+    </nav>
   )
 }
 

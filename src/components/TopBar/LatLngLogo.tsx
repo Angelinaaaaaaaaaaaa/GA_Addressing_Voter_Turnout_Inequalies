@@ -15,10 +15,6 @@ const LatLngLogo = () => {
 
     setLocation(map.getCenter())
 
-    map?.on('move', () => {
-      setLocation(map.getCenter())
-    })
-
     const handleMove = () => {
       setLocation(map.getCenter())
     }
@@ -31,15 +27,12 @@ const LatLngLogo = () => {
   }, [map])
 
   return (
-    <div className="flex gap-2 text-lg font-black leading-none text-white md:text-2xl md:leading-none">
+    <div className="flex items-center gap-2">
       <div className="flex items-center">
-        <Compass size={36} className="text-slate-50 md:hidden" />
-        <Compass size={48} className="text-slate-50 hidden md:block" />
+        <Compass size={20} className="text-purple-400" />
       </div>
-      <div className="text-slate-50 flex items-center">
-        {lat}
-        <br />
-        {lng}
+      <div className="flex items-center text-xs font-medium">
+        <span className="text-purple-300">Lat: {lat}, Lng: {lng}</span>
       </div>
     </div>
   )

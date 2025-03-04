@@ -10,12 +10,12 @@ export const AppConfig = {
   minZoom: 7, // Adjusted to show a broader area of Georgia
   maxZoom: 18, // Max zoom level
   ui: {
-    topBarHeight: 80,
+    topBarHeight: 32,
     bigIconSize: 48,
     mapIconSize: 24,
     markerIconSize: 16,
     menuIconSize: 16,
-    topBarIconSize: 24,
+    topBarIconSize: 18,
   },
   baseCenter: [33.6407, -83.6762] as LatLngExpression, // Centered on Georgia, USA
   maxBounds: georgiaBounds, // Restrict the map to Georgia's bounds
