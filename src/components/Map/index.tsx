@@ -51,7 +51,11 @@ const getViewState: (map?: Leaflet.Map) => ViewState | undefined = (map?: Leafle
   }
 }
 
-const LeafletMapInner = () => {
+interface MapProps {
+  onClustersChange?: (clusters: Record<Category, PlacesType>) => void;
+}
+
+const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
   const { map } = useMapContext()
 
   // we can use this to modify our query for locations
@@ -90,6 +94,13 @@ const LeafletMapInner = () => {
     viewportHeight,
   })
 
+  // Update parent component with current clusters
+  useEffect(() => {
+    if (clustersByCategory && onClustersChange) {
+      onClustersChange(clustersByCategory);
+    }
+  }, [clustersByCategory, onClustersChange]);
+
   const isLoading = !map || !viewportWidth || !viewportHeight
 
   /** watch position & zoom of all markers */
@@ -120,38 +131,40 @@ const LeafletMapInner = () => {
         }}
       >
         {allMarkersBoundCenter && clustersByCategory && (
-          <LeafletMapContainer
-            center={allMarkersBoundCenter.centerPos}
-            zoom={allMarkersBoundCenter.minZoom}
-            maxZoom={AppConfig.maxZoom}
-            minZoom={AppConfig.minZoom}
-          >
-            {!isLoading ? (
-              <>
-                <CenterToMarkerButton
-                  center={allMarkersBoundCenter.centerPos}
-                  zoom={allMarkersBoundCenter.minZoom}
-                />
-                <LocateButton />
-                {Object.values(clustersByCategory).map(item => (
-                  <LeafletCluster
-                    key={item.category}
-                    icon={MarkerCategories[item.category as Category].icon}
-                    color={MarkerCategories[item.category as Category].color}
-                    chunkedLoading
-                  >
-                    {item.markers.map(marker => (
-                      <CustomMarker place={marker} key={marker.id} />
-                    ))}
-                  </LeafletCluster>
-                ))}
-              </>
-            ) : (
-              // we have to spawn at least one element to keep it happy
-              // eslint-disable-next-line react/jsx-no-useless-fragment
-              <></>
-            )}
-          </LeafletMapContainer>
+          <div style={{ height: '100%', width: '100%' }}>
+            <LeafletMapContainer
+              center={allMarkersBoundCenter.centerPos}
+              zoom={allMarkersBoundCenter.minZoom}
+              maxZoom={AppConfig.maxZoom}
+              minZoom={AppConfig.minZoom}
+            >
+              {!isLoading ? (
+                <>
+                  <CenterToMarkerButton
+                    center={allMarkersBoundCenter.centerPos}
+                    zoom={allMarkersBoundCenter.minZoom}
+                  />
+                  <LocateButton />
+                  {Object.entries(clustersByCategory).map(([category, markers]) => (
+                    <LeafletCluster
+                      key={category}
+                      icon={MarkerCategories[Number(category) as Category].icon}
+                      color={MarkerCategories[Number(category) as Category].color}
+                      chunkedLoading
+                    >
+                      {markers.map((marker: PlacesType[number]) => (
+                        <CustomMarker place={marker} key={marker.id} />
+                      ))}
+                    </LeafletCluster>
+                  ))}
+                </>
+              ) : (
+                // we have to spawn at least one element to keep it happy
+                // eslint-disable-next-line react/jsx-no-useless-fragment
+                <></>
+              )}
+            </LeafletMapContainer>
+          </div>
         )}
       </div>
     </div>
@@ -159,9 +172,9 @@ const LeafletMapInner = () => {
 }
 
 // pass through to get context in <MapInner>
-const Map = () => (
+const Map: React.FC<MapProps> = (props) => (
   <LeafleftMapContextProvider>
-    <LeafletMapInner />
+    <LeafletMapInner {...props} />
   </LeafleftMapContextProvider>
 )
 
