@@ -45,7 +45,7 @@ export const LocateButton = () => {
             title: 'Your location',
             address: 'You are here',
             position: userPosition,
-            category: Category.LOCATE,
+            category: Category.OTHER,
           }}
         />
       )}
