@@ -111,12 +111,12 @@ const Home = () => (
     {/* Footer (Unchanged) */}
     <footer className="mt-12 flex justify-between rounded bg-light p-3 text-sm">
       <div>
-        2023, some rights reserved <br />
+        © 2024 GA Research. Content available for academic use. <br />
         <Link
-          href="https://github.com/richard-unterberg/typescript-next-leaflet-starter"
+          href="https://github.com/Angelinaaaaaaaaaaaa/GA_Addressing_Voter_Turnout_Inequalies"
           className="text-primary"
         >
-          typescript-next-leaflet-starter
+          GA_Voting_Equality_Research
         </Link>
       </div>
       <div className="text-primary">

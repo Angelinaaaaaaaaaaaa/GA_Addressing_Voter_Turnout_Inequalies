@@ -5,16 +5,15 @@ import Map from '#components/Map'
 const MapPage = () => (
   <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
     <Head>
-      <title>Map Example | Jumps tart your new leaflet mapping Project with next.js and typescript 🤩</title>
+      <title>Voter Turnout Map | GA Addressing Voter Turnout Inequalities</title>
       <meta
-        property="og:title"
-        content="Map Example | Jumpstart your new leaflet mapping Project with next.js and typescript 🤩"
-        key="title"
+          property="og:title"
+          content="Interactive Voter Turnout Map | Visualizing Electoral Participation Across Georgia"
+          key="title"
       />
       <meta
-        name="description"
-        content="next-leaflet-starter-typescript is an extensible next.js starter template for the leaflet-maps-react plugin. Written in typescript,
-      visually enhanced by tailwind and lucide-react icons."
+          name="description"
+          content="Explore Georgia's voter turnout patterns through our interactive map visualization. Analyze demographic data and participation rates across different regions."
       />
     </Head>
 
