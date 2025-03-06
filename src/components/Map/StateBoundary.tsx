@@ -48,17 +48,19 @@ const StateBoundaryComponent = () => {
         return;
       }
 
-      // Import Leaflet only on client side
-      const L = await import('leaflet');
-
       // Create and add GeoJSON layer to the map
+      // Import L from the already loaded leaflet instance via react-leaflet
+      const L = map.L || window.L;
+
       const geoJsonLayer = L.geoJSON(data, {
         style: GEOJSON_STYLE,
       }).addTo(map);
 
       // Return cleanup function
       return () => {
-        map.removeLayer(geoJsonLayer);
+        if (map && geoJsonLayer) {
+          map.removeLayer(geoJsonLayer);
+        }
       };
     } catch (error) {
       console.error('Error loading state boundary:', error);
@@ -68,16 +70,16 @@ const StateBoundaryComponent = () => {
   useEffect(() => {
     let cleanup: (() => void) | undefined;
 
-    // Only run in browser environment
-    if (typeof window !== 'undefined') {
+    const timer = setTimeout(() => {
       // Execute loading and store cleanup function
       loadStateBoundary().then((cleanupFn) => {
         cleanup = cleanupFn;
       });
-    }
+    }, 100); // Small delay to ensure map is fully loaded
 
     // Cleanup on component unmount
     return () => {
+      clearTimeout(timer);
       cleanup?.();
     };
   }, [loadStateBoundary]);
@@ -85,7 +87,9 @@ const StateBoundaryComponent = () => {
   return null;
 };
 
-// Export with dynamic import to disable SSR
-export default dynamic(() => Promise.resolve(StateBoundaryComponent), {
+// Create a wrapper component that only renders on client side
+const StateBoundary = dynamic(() => Promise.resolve(StateBoundaryComponent), {
   ssr: false,
 });
+
+export default StateBoundary;
