@@ -23,7 +23,7 @@ const GEOJSON_STYLE: GeoJSONStyle = {
   fillOpacity: 0,
 };
 
-const GEOJSON_PATH = '/data/geojson/ga_state_boundary/georgia-with-county-boundaries_1092.geojson';
+const GEOJSON_PATH = '/data/geojson/georgia-with-county-boundaries.geojson';
 
 // Create the actual component
 const StateBoundaryComponent = () => {
