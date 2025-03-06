@@ -1,12 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { useMap } from 'react-leaflet';
 import dynamic from 'next/dynamic';
-
-// Type definitions
-interface CountyProperties {
-  coordinates: number[][][];
-  [key: string]: any;
-}
 
 interface GeoJSONStyle {
   color: string;
@@ -25,80 +18,75 @@ const GEOJSON_STYLE: GeoJSONStyle = {
 
 const GEOJSON_PATH = '/data/geojson/georgia-with-county-boundaries.geojson';
 
-// Create the actual component
-const StateBoundaryComponent = () => {
-  const map = useMap();
+// Create a client-side only component
+const ClientSideComponent = dynamic(
+  () => import('react-leaflet').then((mod) => {
+    // This function creates and returns a component that uses react-leaflet
+    return function StateBoundaryInner() {
+      const { useMap } = mod;
+      const map = useMap();
 
-  // Load state boundary data and add it to the map
-  const loadStateBoundary = useCallback(async () => {
-    if (typeof window === 'undefined') return;
+      const loadStateBoundary = useCallback(async () => {
+        try {
+          // Dynamic import of leaflet
+          const L = await import('leaflet').then(mod => mod.default || mod);
+          
+          const response = await fetch(GEOJSON_PATH);
 
-    try {
-      // Ensure Leaflet is available
-      // TypeScript needs this declaration to recognize L as a global variable
-      const L = (window as any).L;
-      if (!L) {
-        console.error('Leaflet is not loaded');
-        return;
-      }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(
+                JSON.stringify({
+                  status: response.status,
+                  statusText: response.statusText,
+                  url: response.url,
+                  data: errorData,
+                  message: `Request failed with status ${response.status}`
+                })
+            );
+          }
 
-      // Fetch GeoJSON data
-      const response = await fetch(GEOJSON_PATH);
+          const data = await response.json();
 
-      // Check if the HTTP response is successful
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+          if (!data?.features) {
+            console.error('Invalid state boundary data format:', data);
+            return;
+          }
 
-      const data = await response.json();
+          const geoJsonLayer = L.geoJSON(data, {
+            style: GEOJSON_STYLE,
+          }).addTo(map);
 
-      // Validate data format
-      if (!data?.features) {
-        console.error('Invalid state boundary data format:', data);
-        return;
-      }
-
-      // Create and add GeoJSON layer to the map
-      const geoJsonLayer = L.geoJSON(data, {
-        style: GEOJSON_STYLE,
-      }).addTo(map);
-
-      // Return cleanup function
-      return () => {
-        if (map && geoJsonLayer) {
-          map.removeLayer(geoJsonLayer);
+          return () => {
+            if (map && geoJsonLayer) {
+              map.removeLayer(geoJsonLayer);
+            }
+          };
+        } catch (error) {
+          console.error('Error loading state boundary:', error);
         }
-      };
-    } catch (error) {
-      console.error('Error loading state boundary:', error);
-    }
-  }, [map]);
+      }, [map]);
 
-  useEffect(() => {
-    let cleanup: (() => void) | undefined;
+      useEffect(() => {
+        let cleanup: (() => void) | undefined;
 
-    // Only run in browser environment
-    if (typeof window !== 'undefined') {
-      // Small delay to ensure map and Leaflet are fully loaded
-      const timer = setTimeout(() => {
-        loadStateBoundary().then((cleanupFn) => {
-          cleanup = cleanupFn;
-        });
-      }, 300);
+        const timer = setTimeout(() => {
+          loadStateBoundary().then((cleanupFn) => {
+            cleanup = cleanupFn;
+          });
+        }, 300);
 
-      return () => {
-        clearTimeout(timer);
-        cleanup?.();
-      };
-    }
+        return () => {
+          clearTimeout(timer);
+          cleanup?.();
+        };
+      }, [loadStateBoundary]);
 
-    return undefined;
-  }, [loadStateBoundary]);
+      return null;
+    };
+  }),
+  { ssr: false, loading: () => null }
+);
 
-  return null;
-};
-
-// Export with dynamic import to disable SSR
-export default dynamic(() => Promise.resolve(StateBoundaryComponent), {
-  ssr: false,
-});
+// Export the client-side component
+export default ClientSideComponent;
