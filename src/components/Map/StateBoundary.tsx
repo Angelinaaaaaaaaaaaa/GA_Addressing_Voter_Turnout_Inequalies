@@ -31,7 +31,17 @@ const StateBoundaryComponent = () => {
 
   // Load state boundary data and add it to the map
   const loadStateBoundary = useCallback(async () => {
+    if (typeof window === 'undefined') return;
+
     try {
+      // Ensure Leaflet is available
+      // TypeScript needs this declaration to recognize L as a global variable
+      const L = (window as any).L;
+      if (!L) {
+        console.error('Leaflet is not loaded');
+        return;
+      }
+
       // Fetch GeoJSON data
       const response = await fetch(GEOJSON_PATH);
 
@@ -49,9 +59,6 @@ const StateBoundaryComponent = () => {
       }
 
       // Create and add GeoJSON layer to the map
-      // Import L from the already loaded leaflet instance via react-leaflet
-      const L = map.L || window.L;
-
       const geoJsonLayer = L.geoJSON(data, {
         style: GEOJSON_STYLE,
       }).addTo(map);
@@ -70,26 +77,28 @@ const StateBoundaryComponent = () => {
   useEffect(() => {
     let cleanup: (() => void) | undefined;
 
-    const timer = setTimeout(() => {
-      // Execute loading and store cleanup function
-      loadStateBoundary().then((cleanupFn) => {
-        cleanup = cleanupFn;
-      });
-    }, 100); // Small delay to ensure map is fully loaded
+    // Only run in browser environment
+    if (typeof window !== 'undefined') {
+      // Small delay to ensure map and Leaflet are fully loaded
+      const timer = setTimeout(() => {
+        loadStateBoundary().then((cleanupFn) => {
+          cleanup = cleanupFn;
+        });
+      }, 300);
 
-    // Cleanup on component unmount
-    return () => {
-      clearTimeout(timer);
-      cleanup?.();
-    };
+      return () => {
+        clearTimeout(timer);
+        cleanup?.();
+      };
+    }
+
+    return undefined;
   }, [loadStateBoundary]);
 
   return null;
 };
 
-// Create a wrapper component that only renders on client side
-const StateBoundary = dynamic(() => Promise.resolve(StateBoundaryComponent), {
+// Export with dynamic import to disable SSR
+export default dynamic(() => Promise.resolve(StateBoundaryComponent), {
   ssr: false,
 });
-
-export default StateBoundary;
