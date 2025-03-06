@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useMap } from 'react-leaflet';
 import dynamic from 'next/dynamic';
+import 'leaflet/dist/leaflet.css';
 
 // Type definitions
 interface CountyProperties {
@@ -33,31 +34,26 @@ const StateBoundary = () => {
     // Load state boundary data and add it to the map
     const loadStateBoundary = useCallback(async () => {
         try {
-            // Parallel loading of Leaflet library and GeoJSON data
             const [L, response] = await Promise.all([
                 import('leaflet'),
                 fetch(GEOJSON_PATH),
             ]);
 
-            // Check if the HTTP response is successful
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
 
-            // Validate data format
             if (!data?.features) {
                 console.error('Invalid state boundary data format:', data);
                 return;
             }
 
-            // Create and add GeoJSON layer to the map
             const geoJsonLayer = L.geoJSON(data, {
                 style: GEOJSON_STYLE,
             }).addTo(map);
 
-            // Return cleanup function
             return () => {
                 map.removeLayer(geoJsonLayer);
             };
@@ -67,20 +63,10 @@ const StateBoundary = () => {
     }, [map]);
 
     useEffect(() => {
-        let cleanup: (() => void) | undefined;
-
-        // Execute loading and store cleanup function
-        loadStateBoundary().then((cleanupFn) => {
-            cleanup = cleanupFn;
-        });
-
-        // Cleanup on component unmount
-        return () => {
-            cleanup?.();
-        };
+        loadStateBoundary();
     }, [loadStateBoundary]);
 
-    return null;
+    return <div id="map" style={{ height: '500px', width: '100%' }} />;
 };
 
 // Export with dynamic import to disable SSR
