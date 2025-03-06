@@ -25,17 +25,15 @@ const GEOJSON_STYLE: GeoJSONStyle = {
 
 const GEOJSON_PATH = '/data/geojson/ga_state_boundary/georgia-with-county-boundaries_1092.geojson';
 
-const StateBoundary = () => {
+// Create the actual component
+const StateBoundaryComponent = () => {
   const map = useMap();
 
   // Load state boundary data and add it to the map
   const loadStateBoundary = useCallback(async () => {
     try {
-      // Parallel loading of Leaflet library and GeoJSON data
-      const [L, response] = await Promise.all([
-        import('leaflet'),
-        fetch(GEOJSON_PATH),
-      ]);
+      // Fetch GeoJSON data
+      const response = await fetch(GEOJSON_PATH);
 
       // Check if the HTTP response is successful
       if (!response.ok) {
@@ -49,6 +47,9 @@ const StateBoundary = () => {
         console.error('Invalid state boundary data format:', data);
         return;
       }
+
+      // Import Leaflet only on client side
+      const L = await import('leaflet');
 
       // Create and add GeoJSON layer to the map
       const geoJsonLayer = L.geoJSON(data, {
@@ -67,10 +68,13 @@ const StateBoundary = () => {
   useEffect(() => {
     let cleanup: (() => void) | undefined;
 
-    // Execute loading and store cleanup function
-    loadStateBoundary().then((cleanupFn) => {
-      cleanup = cleanupFn;
-    });
+    // Only run in browser environment
+    if (typeof window !== 'undefined') {
+      // Execute loading and store cleanup function
+      loadStateBoundary().then((cleanupFn) => {
+        cleanup = cleanupFn;
+      });
+    }
 
     // Cleanup on component unmount
     return () => {
@@ -82,6 +86,6 @@ const StateBoundary = () => {
 };
 
 // Export with dynamic import to disable SSR
-export default dynamic(() => Promise.resolve(StateBoundary), {
+export default dynamic(() => Promise.resolve(StateBoundaryComponent), {
   ssr: false,
 });
