@@ -58,17 +58,31 @@ interface MapProps {
 }
 
 const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
+  // Initial state: hide all categories except BLANK (Unclassified)
+  const initialHiddenCategories = Object.values(Category)
+    .filter(category => category !== Category.BLANK)
+    .map(category => category as Category)
+
+  const [hiddenCategories, setHiddenCategories] = useState<Category[]>(initialHiddenCategories)
+  const { width: viewportWidth, height: viewportHeight, ref: viewportRef } = useResizeDetector()
   const { map } = useMapContext()
   const [viewState, setViewState] = useState(getViewState(map))
 
-  const {
-    width: viewportWidth,
-    height: viewportHeight,
-    ref: viewportRef,
-  } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 200,
-  })
+  const handleCategoryToggle = useCallback((category: Category, visible: boolean) => {
+    setHiddenCategories(prev => 
+      visible 
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    )
+  }, [])
+
+  const handleShowAll = useCallback(() => {
+    setHiddenCategories([])
+  }, [])
+
+  const handleReset = useCallback(() => {
+    setHiddenCategories(initialHiddenCategories)
+  }, [])
 
   // Debounced view state update
   const handleMapMoveEnd = useCallback(
@@ -154,6 +168,9 @@ const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
                   <LocateButton />
                   {Object.entries(clustersByCategory).map(([categoryStr, markers]) => {
                     const category = Number(categoryStr) as Category;
+                    if (hiddenCategories.includes(category)) {
+                      return null;
+                    }
                     return (
                       <LeafletCluster
                         key={category}
@@ -167,7 +184,12 @@ const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
                       </LeafletCluster>
                     );
                   })}
-                  <MapLegend />
+                  <MapLegend 
+                    onCategoryToggle={handleCategoryToggle}
+                    hiddenCategories={hiddenCategories}
+                    onShowAll={handleShowAll}
+                    onReset={handleReset}
+                  />
                 </>
               ) : (
                 <></>
