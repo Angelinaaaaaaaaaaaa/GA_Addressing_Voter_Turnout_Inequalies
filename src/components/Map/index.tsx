@@ -66,10 +66,8 @@ const LeafletMapInner: React.FC<MapProps> = ({
   onClustersChange, 
   onHiddenCategoriesChange 
 }) => {
-  // Initial state: hide all categories except BLANK (Unclassified)
-  const initialHiddenCategories = Object.values(Category)
-      .filter(category => category !== Category.BLANK)
-      .map(category => category as Category)
+  // Initial state: hide all categories
+  const initialHiddenCategories: Category[] = []
 
   const [hiddenCategories, setHiddenCategories] = useState<Category[]>(initialHiddenCategories)
   const { width: viewportWidth, height: viewportHeight, ref: viewportRef } = useResizeDetector()
@@ -88,8 +86,8 @@ const LeafletMapInner: React.FC<MapProps> = ({
     setHiddenCategories([])
   }, [])
 
-  const handleReset = useCallback(() => {
-    setHiddenCategories(initialHiddenCategories)
+  const handleHideAll = useCallback(() => {
+  setHiddenCategories(Object.values(Category).map(category => category as Category))
   }, [])
 
   // Debounced view state update
@@ -209,7 +207,7 @@ const LeafletMapInner: React.FC<MapProps> = ({
                               <LeafletCluster
                                   key={category}
                                   icon={MarkerCategories[category].icon}
-                                  color={MarkerCategories[category].color}
+                                  color="#3B82F6"  // Replace with your desired color
                                   chunkedLoading
                               >
                                 {markers.map((marker) => (
@@ -222,7 +220,7 @@ const LeafletMapInner: React.FC<MapProps> = ({
                             onCategoryToggle={handleCategoryToggle}
                             hiddenCategories={hiddenCategories}
                             onShowAll={handleShowAll}
-                            onReset={handleReset}
+                            onHideAll={handleHideAll}  // 将 onReset 改为 onHideAll
                         />
                       </>
                   ) : (

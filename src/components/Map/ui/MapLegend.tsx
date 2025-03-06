@@ -1,4 +1,4 @@
-import { LucideProps, Eye, RotateCcw } from 'lucide-react'
+import { LucideProps, Eye, EyeOff } from 'lucide-react'
 import { FunctionComponent, useCallback } from 'react'
 import MarkerCategories, { Category } from '#lib/MarkerCategories'
 import LegendIcon from './LegendIcon'
@@ -7,10 +7,10 @@ interface MapLegendProps {
   onCategoryToggle: (category: Category, visible: boolean) => void
   hiddenCategories: Category[]
   onShowAll: () => void
-  onReset: () => void
+  onHideAll: () => void
 }
 
-const MapLegend = ({ onCategoryToggle, hiddenCategories, onShowAll, onReset }: MapLegendProps) => {
+const MapLegend = ({ onCategoryToggle, hiddenCategories, onShowAll, onHideAll }: MapLegendProps) => {
   const handleCategoryClick = useCallback((category: Category) => {
     const isCurrentlyHidden = hiddenCategories.includes(category)
     onCategoryToggle(category, isCurrentlyHidden)
@@ -30,10 +30,10 @@ const MapLegend = ({ onCategoryToggle, hiddenCategories, onShowAll, onReset }: M
             </button>
             <button
                 className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                title="Reset to Default View"
-                onClick={onReset}
+                title="Hide All Categories"
+                onClick={onHideAll}
             >
-              <RotateCcw size={16} />
+              <EyeOff size={16} />
             </button>
           </div>
         </div>
@@ -65,4 +65,4 @@ const MapLegend = ({ onCategoryToggle, hiddenCategories, onShowAll, onReset }: M
   )
 }
 
-export default MapLegend 
+export default MapLegend

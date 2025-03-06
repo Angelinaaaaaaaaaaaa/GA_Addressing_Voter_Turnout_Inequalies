@@ -12,6 +12,8 @@ import MarkerIconWrapper from './MarkerIconWrapper'
 
 const LeafletPopup = dynamic(() => import('../LeafletPopup'))
 
+const MARKER_COLOR = "#3B82F6"
+
 export interface CustomMarkerProps {
   place: PlaceValues
 }
@@ -45,7 +47,7 @@ export const CustomMarker = ({ place }: CustomMarkerProps) => {
     <ReactMarker
       position={place.position}
       icon={LeafletDivIcon({
-        source: <MarkerIconWrapper color={markerCategory.color} icon={markerCategory.icon} />,
+        source: <MarkerIconWrapper color={MARKER_COLOR} icon={markerCategory.icon} />,
         anchor: [AppConfig.ui.markerIconSize / 2, AppConfig.ui.markerIconSize / 2],
       })}
       eventHandlers={{ click: handleMarkerClick }}
@@ -57,7 +59,7 @@ export const CustomMarker = ({ place }: CustomMarkerProps) => {
         autoClose
         closeButton={false}
         item={place}
-        color={markerCategory.color}
+        color={MARKER_COLOR}
         icon={markerCategory.icon}
         handleOpenLocation={handleOpenLocation}
         handlePopupClose={handlePopupClose}
