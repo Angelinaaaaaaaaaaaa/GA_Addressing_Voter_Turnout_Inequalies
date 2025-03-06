@@ -1,5 +1,5 @@
-import { LucideProps, Eye, EyeOff, RotateCcw } from 'lucide-react'
-import { FunctionComponent, useState, useCallback } from 'react'
+import { LucideProps, Eye, RotateCcw } from 'lucide-react'
+import { FunctionComponent, useCallback } from 'react'
 import MarkerCategories, { Category } from '#lib/MarkerCategories'
 import LegendIcon from './LegendIcon'
 

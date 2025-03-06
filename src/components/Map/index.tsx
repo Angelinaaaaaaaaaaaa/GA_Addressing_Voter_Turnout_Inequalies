@@ -13,6 +13,7 @@ import LeafleftMapContextProvider from './LeafletMapContextProvider'
 import useMapContext from './useMapContext'
 import useMarkerData from './useMarkerData'
 import MapLegend from './ui/MapLegend'
+import StateBoundary from './StateBoundary'
 
 const LeafletCluster = dynamic(async () => (await import('./LeafletCluster')).LeafletCluster(), {
   ssr: false,
@@ -161,6 +162,8 @@ const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
                 >
                   {!isLoading ? (
                       <>
+                        <StateBoundary />
+
                         <CenterToMarkerButton
                             center={allMarkersBoundCenter.centerPos}
                             zoom={allMarkersBoundCenter.minZoom}
