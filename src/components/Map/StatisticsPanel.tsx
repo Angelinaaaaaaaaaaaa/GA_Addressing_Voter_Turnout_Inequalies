@@ -2,10 +2,36 @@ import React, { useMemo } from 'react';
 import { PlacesType } from '#lib/Places';
 import { Category } from '#lib/MarkerCategories';
 
+/**
+ * Type definitions for statistics data
+ */
+interface Statistics {
+  advancedPollingPlaces: number;
+  unavailablePlaces: number;
+  availableStatus: number;
+  unavailableStatus: number;
+}
+
+/**
+ * Props interface for the StatisticsPanel component
+ */
 interface StatisticsPanelProps {
   clustersByCategory?: Record<Category, PlacesType>;
+  hiddenCategories?: Category[];
   isLoading?: boolean;
   error?: Error;
+}
+
+/**
+ * Props interface for the StatCard component
+ */
+interface StatCardProps {
+  title: string;
+  value: string | number;
+  icon: React.ReactNode;
+  color: 'blue' | 'green' | 'purple' | 'orange';  // Restrict color options
+  subtitle: string;
+  isLoading?: boolean;
 }
 
 // SVG Icons components for better reusability
@@ -34,68 +60,100 @@ const StatusIcon = () => (
   </svg>
 );
 
-// Separate card component for better reusability
-const StatCard: React.FC<{
-  title: string;
-  value: string | number;
-  icon: React.ReactNode;
-  color: string;
-  subtitle: string;
-  isLoading?: boolean;
-}> = ({ title, value, icon, color, subtitle, isLoading }) => (
-  <div className={`bg-${color}-100 p-3 rounded-lg border-2 border-${color}-300 flex-1 hover:bg-${color}-200 transition-colors relative min-h-[120px]`}>
-    <div className="flex items-center justify-between mb-1">
-      <p className={`text-sm font-semibold text-${color}-800`}>{title}</p>
-      <span className={`text-${color}-600`}>{icon}</span>
+/**
+ * StatCard Component
+ * Displays a single statistics card with consistent styling
+ */
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, subtitle, isLoading }) => {
+  // Pre-compute Tailwind classes to avoid runtime concatenation issues
+  const colorClasses = {
+    container: {
+      blue: 'bg-blue-100 border-blue-300 hover:bg-blue-200',
+      green: 'bg-green-100 border-green-300 hover:bg-green-200',
+      purple: 'bg-purple-100 border-purple-300 hover:bg-purple-200',
+      orange: 'bg-orange-100 border-orange-300 hover:bg-orange-200'
+    },
+    text: {
+      blue: 'text-blue-800',
+      green: 'text-green-800',
+      purple: 'text-purple-800',
+      orange: 'text-orange-800'
+    },
+    icon: {
+      blue: 'text-blue-600',
+      green: 'text-green-600',
+      purple: 'text-purple-600',
+      orange: 'text-orange-600'
+    }
+  };
+
+  return (
+    <div className={`p-3 rounded-lg border-2 flex-1 transition-colors relative min-h-[120px] ${colorClasses.container[color]}`}>
+      <div className="flex items-center justify-between mb-1">
+        <p className={`text-sm font-semibold ${colorClasses.text[color]}`}>{title}</p>
+        <span className={colorClasses.icon[color]}>{icon}</span>
+      </div>
+      <p className={`text-2xl font-bold ${colorClasses.text[color]} mb-6 ${isLoading ? 'animate-pulse' : ''}`}>
+        {isLoading ? '...' : value}
+      </p>
+      <p className={`absolute bottom-0 right-3 text-xs ${colorClasses.icon[color]}`}>{subtitle}</p>
     </div>
-    <p className={`text-2xl font-bold text-${color}-900 mb-6 ${isLoading ? 'animate-pulse' : ''}`}>
-      {isLoading ? '...' : value}
-    </p>
-    <p className={`absolute bottom-0 right-3 text-xs text-${color}-600`}>{subtitle}</p>
-  </div>
-);
+  );
+};
 
-const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ 
+/**
+ * StatisticsPanel Component
+ * Displays statistical information about polling places
+ * Takes into account hidden categories from the map legend
+ */
+const StatisticsPanel: React.FC<StatisticsPanelProps> = ({
   clustersByCategory,
+  hiddenCategories = [],
   isLoading = false,
-  error 
+  error
 }) => {
-  // Calculate statistics based on visible markers
-  const visibleMarkers = useMemo(() => 
-    clustersByCategory 
-      ? Object.values(clustersByCategory).flatMap(markers => markers)
-      : [],
-    [clustersByCategory]
-  );
-  
-  const totalPlaces = visibleMarkers.length;
-  
-  // Get unique counties from visible markers
-  const countyCount = useMemo(() => 
-    new Set(visibleMarkers.map(marker => marker.county)).size,
-    [visibleMarkers]
-  );
+  /**
+   * Calculate all statistics in a single pass through the data
+   * Memoized to prevent unnecessary recalculations
+   */
+  const { visibleMarkers, totalPlaces, countyCount, statistics } = useMemo(() => {
+    const markers = clustersByCategory
+      ? Object.entries(clustersByCategory)
+          .filter(([categoryStr]) => !hiddenCategories.includes(Number(categoryStr) as Category))
+          .flatMap(([_, markers]) => markers)
+      : [];
 
-  // Calculate all statistics in one pass with validation
-  const statistics = useMemo(() => {
-    const stats = {
+    const counties = new Set<string>();
+    const stats: Statistics = {
       advancedPollingPlaces: 0,
       unavailablePlaces: 0,
       availableStatus: 0,
       unavailableStatus: 0
     };
 
-    visibleMarkers.forEach(place => {
-      // Validate data before counting
+    markers.forEach(place => {
+      // Add null check for county to prevent adding undefined/null values to Set
+      if (place.county) {
+        counties.add(place.county);
+      }
+
       if (place.advanced_polling_place === 'Yes') stats.advancedPollingPlaces++;
       if (place.advanced_polling_place === 'No') stats.unavailablePlaces++;
       if (place.polling_place_status === 'Available') stats.availableStatus++;
       if (place.polling_place_status === 'Unavailable') stats.unavailableStatus++;
     });
 
-    return stats;
-  }, [visibleMarkers]);
+    return {
+      visibleMarkers: markers,
+      totalPlaces: markers.length,
+      countyCount: counties.size,
+      statistics: stats
+    };
+  }, [clustersByCategory, hiddenCategories]);
 
+  /**
+   * Error state display
+   */
   if (error) {
     return (
       <div className="bg-white p-3 rounded-lg shadow-lg w-full border border-red-200">
@@ -104,6 +162,9 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({
     );
   }
 
+  /**
+   * No data state display
+   */
   if (!clustersByCategory) {
     return (
       <div className="bg-white p-3 rounded-lg shadow-lg w-full border border-gray-200">
@@ -113,8 +174,9 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({
   }
 
   return (
-    <div className="bg-white p-3 rounded-lg shadow-lg w-full border border-gray-200">
+    <div className="bg-white p-3 rounded-lg shadow-lg w-full">
       <div className="flex items-center justify-between gap-3">
+        {/* Statistics cards */}
         <StatCard
           title="Total Locations"
           value={totalPlaces}
@@ -155,4 +217,4 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({
   );
 };
 
-export default StatisticsPanel; 
+export default StatisticsPanel;

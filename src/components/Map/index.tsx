@@ -54,11 +54,18 @@ const getViewState: (map?: Leaflet.Map) => ViewState | undefined = (map?: Leafle
   }
 }
 
+/**
+ * Props interface for the Map component
+ */
 interface MapProps {
   onClustersChange?: (clusters: Record<Category, PlacesType>) => void;
+  onHiddenCategoriesChange?: (categories: Category[]) => void;  // Add new prop
 }
 
-const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
+const LeafletMapInner: React.FC<MapProps> = ({ 
+  onClustersChange, 
+  onHiddenCategoriesChange 
+}) => {
   // Initial state: hide all categories except BLANK (Unclassified)
   const initialHiddenCategories = Object.values(Category)
       .filter(category => category !== Category.BLANK)
@@ -123,19 +130,43 @@ const LeafletMapInner: React.FC<MapProps> = ({ onClustersChange }) => {
     }
   }, [clustersByCategory, onClustersChange]);
 
+  /**
+   * Update parent component when hidden categories change
+   * This ensures statistics panel is in sync with map legend
+   */
+  useEffect(() => {
+    if (onHiddenCategoriesChange) {
+      onHiddenCategoriesChange(hiddenCategories);
+    }
+  }, [hiddenCategories, onHiddenCategoriesChange]);
+
   const isLoading = !map || !viewportWidth || !viewportHeight
 
   /** watch position & zoom of all markers */
   useEffect(() => {
     if (!allMarkersBoundCenter || !map) return
 
-    const moveEnd = () => {
-      map.off('moveend', moveEnd)
-    }
-
-    map.flyTo(allMarkersBoundCenter.centerPos, allMarkersBoundCenter.minZoom, { animate: false })
-    map.once('moveend', moveEnd)
-  }, [allMarkersBoundCenter, map])
+    // Add a small delay to ensure map is fully initialized
+    const timer = setTimeout(() => {
+      const moveEnd = () => {
+        map.off('moveend', moveEnd);
+      };
+    
+      try {
+        map.flyTo(allMarkersBoundCenter.centerPos, allMarkersBoundCenter.minZoom, { 
+          animate: false,
+          duration: 0 
+        });
+        map.once('moveend', moveEnd);
+      } catch (error) {
+        console.warn('Map flyTo failed:', error);
+      }
+    }, 100);
+    
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [allMarkersBoundCenter, map]);
 
   return (
       <div

@@ -6,7 +6,11 @@ import { Places, PlacesType } from '#lib/Places'
 import { Category } from '#lib/MarkerCategories'
 
 const MapPage = () => {
+  /**
+   * State for managing clusters and hidden categories
+   */
   const [clustersByCategory, setClustersByCategory] = useState<Record<Category, PlacesType>>();
+  const [hiddenCategories, setHiddenCategories] = useState<Category[]>([]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
@@ -27,16 +31,22 @@ const MapPage = () => {
       <div style={{ height: '240px', padding: '20px', backgroundColor: '#f4f4f4' }}>
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl font-bold mb-4">Georgia Voter Turnout Map</h1>
-          <StatisticsPanel clustersByCategory={clustersByCategory} />
+          <StatisticsPanel 
+            clustersByCategory={clustersByCategory}
+            hiddenCategories={hiddenCategories}  // Pass hidden categories
+          />
         </div>
       </div>
 
       {/* Lower section with map */}
       <div style={{ flex: 1, overflow: 'hidden' }}>
-        <Map onClustersChange={setClustersByCategory} />
+        <Map 
+          onClustersChange={setClustersByCategory}
+          onHiddenCategoriesChange={setHiddenCategories}  // Add callback for hidden categories
+        />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default MapPage
