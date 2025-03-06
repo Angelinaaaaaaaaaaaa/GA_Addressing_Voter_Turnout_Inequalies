@@ -16,7 +16,7 @@ const GEOJSON_STYLE: GeoJSONStyle = {
   fillOpacity: 0,
 };
 
-const GEOJSON_PATH = '/data/geojson/georgia-with-county-boundaries.geojson';
+import georgiaGeoJSON from '#lib/geojson/georgia-with-county-boundaries.geojson';
 
 // Create a client-side only component
 const ClientSideComponent = dynamic(
@@ -30,30 +30,13 @@ const ClientSideComponent = dynamic(
         try {
           // Dynamic import of leaflet
           const L = await import('leaflet').then(mod => mod.default || mod);
-          
-          const response = await fetch(GEOJSON_PATH);
 
-          if (!response.ok) {
-            const errorData = await response.json().catch(() => null);
-            throw new Error(
-                JSON.stringify({
-                  status: response.status,
-                  statusText: response.statusText,
-                  url: response.url,
-                  data: errorData,
-                  message: `Request failed with status ${response.status}`
-                })
-            );
-          }
-
-          const data = await response.json();
-
-          if (!data?.features) {
-            console.error('Invalid state boundary data format:', data);
+          if (!georgiaGeoJSON?.features) {
+            console.error('Invalid state boundary data format:', georgiaGeoJSON);
             return;
           }
 
-          const geoJsonLayer = L.geoJSON(data, {
+          const geoJsonLayer = L.geoJSON(georgiaGeoJSON, {
             style: GEOJSON_STYLE,
           }).addTo(map);
 
