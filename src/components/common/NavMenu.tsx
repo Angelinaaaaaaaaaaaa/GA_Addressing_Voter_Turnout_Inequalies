@@ -5,16 +5,19 @@ import NavMenuItem from './NavMenuItem'
 
 interface NavMenuProps {
   variant?: NavMenuVariant
+  horizontal?: boolean
 }
 
-const NavMenu = ({ variant = NavMenuVariant.INTRO }: NavMenuProps) => {
+const NavMenu = ({ variant = NavMenuVariant.INTRO, horizontal = true }: NavMenuProps) => {
   const navIconSize =
     variant === NavMenuVariant.TOPNAV ? AppConfig.ui.topBarIconSize : AppConfig.ui.menuIconSize
 
   const listStyle =
     variant === NavMenuVariant.TOPNAV
       ? 'flex h-full items-center gap-4'
-      : 'flex flex-col justify-between gap-1 w-fit'
+      : horizontal 
+        ? 'flex items-center gap-6' 
+        : 'flex flex-col justify-between gap-1 w-fit'
 
   return (
     <nav className="h-full">
