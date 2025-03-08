@@ -5,6 +5,10 @@ import Link from 'next/link'
 import NavMenu from '#components/common/NavMenu'
 import { AppConfig } from '#lib/AppConfig'
 
+import majorityRaceAllocationImg from '#lib/figures/majority_race_blue.png';
+import tauVsTotalImpactImg from '#lib/figures/tau_vs_total_impact.png';
+import spatialDistributionMapsImg from '#lib/figures/plot_maps.png';
+
 const Home = () => (
   <div className="container mx-auto max-w-2xl p-3 max-md:max-w-none">
     <Head>
@@ -103,40 +107,40 @@ const Home = () => (
     <section className="mb-8">
       <h3 className="mb-4 text-2xl font-bold">Results</h3>
       <p className="mb-4">
-        We analyze the impact of polling station allocation under different fairness constraints (\(\tau\)), examining how the intervention allocation affects racial equity and overall voter turnout. Our findings highlight the trade-off between fairness and total turnout impact.
+        We analyze the impact of polling station allocation under different fairness constraints ((τ)), examining how the intervention allocation affects racial equity and overall voter turnout. Our findings highlight the trade-off between fairness and total turnout impact.
       </p>
 
       {/* Impact-Fairness Tradeoff */}
       <h4 className="mb-3 text-xl font-semibold">Trade-off Between Fairness and Impact</h4>
       <div className="flex flex-col md:flex-row items-center gap-4">
-        <img src="/majority_race_blue.png" alt="Majority Race Allocation" className="w-full md:w-1/2" />
-        <img src="/tau_vs_total_impact.png" alt="Tau vs Total Impact" className="w-full md:w-1/2" />
+        <img src={majorityRaceAllocationImg.src} alt="Majority Race Allocation" className="w-full md:w-1/2" />
+        <img src={tauVsTotalImpactImg.src} alt="Tau vs Total Impact" className="w-full md:w-1/2" />
       </div>
       <p className="mb-4">
-        Figure above illustrates how tightening or loosening the fairness constraint (\(\tau\)) affects both intervention allocation and overall turnout impact.
+        Figure above illustrates how tightening or loosening the fairness constraint ((τ)) affects both intervention allocation and overall turnout impact.
       </p>
 
       <ul className="mb-4 list-disc pl-5">
         <li>
           <strong>Left plot:</strong> Shows the number of interventions allocated to counties by the majority race of each county.
           <ul className="list-disc pl-5">
-            <li>As \(\tau\) increases (stricter fairness), interventions become more equitably distributed across racial groups.</li>
-            <li>At lower \(\tau\), more interventions are allocated to white-majority counties, whereas higher \(\tau\) enforces a more balanced allocation.</li>
+            <li>As (τ) increases (stricter fairness), interventions become more equitably distributed across racial groups.</li>
+            <li>At lower (τ), more interventions are allocated to white-majority counties, whereas higher (τ) enforces a more balanced allocation.</li>
           </ul>
         </li>
         <li>
-          <strong>Right plot:</strong> Shows the impact achieved by different fairness constraints (\(\tau\)).
+          <strong>Right plot:</strong> Shows the impact achieved by different fairness constraints ((τ)).
           <ul className="list-disc pl-5">
-            <li>The total voter turnout impact increases as \(\tau\) increases, but the rate of change varies.</li>
-            <li>When \(\tau\) is small (i.e., the fairness constraint is tight), loosening the constraint results in a substantial rise in impact.</li>
-            <li>Around \(\tau = 0.43\), there is an inflection point where further relaxing fairness constraints leads to minor impact gains.</li>
+            <li>The total voter turnout impact increases as (τ) increases, but the rate of change varies.</li>
+            <li>When (τ) is small (i.e., the fairness constraint is tight), loosening the constraint results in a substantial rise in impact.</li>
+            <li>Around (τ = 0.43), there is an inflection point where further relaxing fairness constraints leads to minor impact gains.</li>
           </ul>
         </li>
       </ul>
 
       {/* Spatial Distribution of Interventions */}
       <h4 className="mb-3 text-xl font-semibold">Spatial Distribution of Interventions</h4>
-      <img src="/figure/plot_1_maps.png" alt="Spatial Distribution of Interventions" className="w-full" />
+      <img src={spatialDistributionMapsImg.src} alt="Spatial Distribution of Interventions" className="w-full" />
       <p className="mb-4">
         This set of four maps visualizes the impact of different polling station allocation strategies across Georgia.
       </p>
@@ -144,10 +148,9 @@ const Home = () => (
         <li><strong>Baseline (All Counties)</strong>: Initial distribution before new allocations.</li>
         <li><strong>Random Polling</strong>: Allocations are scattered without a clear pattern.</li>
         <li><strong>Unconstrained Polling</strong>: Maximizes turnout impact but favors historically high-turnout counties.</li>
-        <li><strong>Constrained Polling (\(\tau = 0.38\))</strong>: Allocations account for racial equity but slightly reduce overall impact.</li>
+        <li><strong>Constrained Polling ((τ = 0.38))</strong>: Allocations account for racial equity but slightly reduce overall impact.</li>
       </ul>
 
-      {/* Table of Impact per Racial Group */}
       {/* Table of Impact per Racial Group */}
       <h4 className="mb-3 text-xl font-semibold">Racial Group-Specific Impact</h4>
       <table className="w-full border-collapse border border-gray-300">
@@ -228,7 +231,7 @@ const Home = () => (
       {/* Key Takeaways */}
       <h4 className="mb-3 text-xl font-semibold">Key Takeaways</h4>
       <ul className="mb-4 list-disc pl-5">
-        <li>Stricter fairness constraints (\(\tau\)) lead to a more balanced allocation while maintaining near-optimal turnout impact.</li>
+        <li>Stricter fairness constraints ((τ)) lead to a more balanced allocation while maintaining near-optimal turnout impact.</li>
         <li>Fairness constraints better align with racial equity goals.</li>
         <li>Unconstrained allocation maximizes turnout but reinforces turnout disparities.</li>
       </ul>

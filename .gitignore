@@ -1,3 +1,5 @@
 node_modules/
 .next/
 .idea/
+.cursor/
+.DS_Store
