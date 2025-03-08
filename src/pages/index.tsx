@@ -1,14 +1,14 @@
 import {
-  BookOpen,
-  Building,
-  Building2,
-  Cross,
-  Factory,
-  GraduationCap,
-  LandmarkIcon,
-  Leaf,
-  PersonStanding,
-  ShoppingBag
+    BookOpen,
+    Building,
+    Building2,
+    Cross,
+    Factory,
+    GraduationCap,
+    LandmarkIcon,
+    Leaf,
+    PersonStanding,
+    ShoppingBag
 } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';

@@ -121,7 +121,7 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({
      * Calculate all statistics in a single pass through the data
      * Memoized to prevent unnecessary recalculations
      */
-    const {visibleMarkers, totalPlaces, countyCount, statistics} = useMemo(() => {
+    const {totalPlaces, countyCount, statistics} = useMemo(() => {
         const markers = clustersByCategory
             ? Object.entries(clustersByCategory)
                 .filter(([categoryStr]) => !hiddenCategories.includes(Number(categoryStr) as Category))
