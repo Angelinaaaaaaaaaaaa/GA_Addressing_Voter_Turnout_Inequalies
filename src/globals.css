@@ -4,177 +4,177 @@
 
 /* Global Styles */
 :root {
-  --color-primary: #6d28d9;
-  --color-primary-dark: #4c1d95;
-  --color-background: #9ea1d4;
-  --color-text: #2d3748;
+    --color-primary: #6d28d9;
+    --color-primary-dark: #4c1d95;
+    --color-background: #9ea1d4;
+    --color-text: #2d3748;
 }
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-text);
+    background-color: var(--color-background);
+    color: var(--color-text);
 }
 
 h1, h2, h3, h4 {
-  color: var(--color-primary-dark);
+    color: var(--color-primary-dark);
 }
 
 .text-primary {
-  color: var(--color-primary);
+    color: var(--color-primary);
 }
 
 .bg-primary {
-  background-color: var(--color-primary);
+    background-color: var(--color-primary);
 }
 
 .container {
-  max-width: 1200px;
-  padding: 16px;
-  margin: auto;
+    max-width: 1200px;
+    padding: 16px;
+    margin: auto;
 }
 
 /* Header Styles */
 header {
-  margin-bottom: 2rem;
+    margin-bottom: 2rem;
 }
 
 h1 {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
-  color: #4c1d95; /* Dark purple for headers */
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: #4c1d95; /* Dark purple for headers */
 }
 
 h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: #4c1d95; /* Dark purple for headers */
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #4c1d95; /* Dark purple for headers */
 }
 
 h3 {
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  color: #4c1d95; /* Dark purple for headers */
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #4c1d95; /* Dark purple for headers */
 }
 
 h4 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #4c1d95; /* Dark purple for headers */
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #4c1d95; /* Dark purple for headers */
 }
 
 /* Paragraph Styles */
 p {
-  margin-bottom: 1.5rem;
-  color: #2d3748; /* Black for paragraphs */
+    margin-bottom: 1.5rem;
+    color: #2d3748; /* Black for paragraphs */
 }
 
 /* List Styles */
 ul {
-  margin-bottom: 1.5rem;
-  padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
 }
 
 li {
-  margin-bottom: 0.5rem;
-  color: #2d3748; /* Black for list items */
+    margin-bottom: 0.5rem;
+    color: #2d3748; /* Black for list items */
 }
 
 /* Leaflet Custom Styling */
 .leaflet-container {
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Utility Classes */
 .text-primary {
-  color: #6d28d9; /* Purple for primary text */
+    color: #6d28d9; /* Purple for primary text */
 }
 
 .bg-primary {
-  background-color: #6d28d9; /* Purple for primary background */
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
+    background-color: #6d28d9; /* Purple for primary background */
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
 }
 
 .footer {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: #4c1d95; /* Dark purple for footer */
-  color: white;
-  text-align: center;
-  border-radius: 8px;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #4c1d95; /* Dark purple for footer */
+    color: white;
+    text-align: center;
+    border-radius: 8px;
 }
 
 /* Emojis for Headers */
 h1::after {
-  content: " 🗳️";
+    content: " 🗳️";
 }
 
 h2::after {
-  content: " 📊";
+    content: " 📊";
 }
 
 h3::after {
-  content: " 📍";
+    content: " 📍";
 }
 
 h4::after {
-  content: " 🔍";
+    content: " 🔍";
 }
 
 /* Improved Spacing */
 section {
-  margin-bottom: 2.5rem;
+    margin-bottom: 2.5rem;
 }
 
 /* Button Styles */
 button {
-  background-color: #6d28d9; /* Purple for buttons */
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
+    background-color: #6d28d9; /* Purple for buttons */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #5b21b6; /* Darker purple on hover */
+    background-color: #5b21b6; /* Darker purple on hover */
 }
 
 /* Link Styles */
 a {
-  color: #6d28d9; /* Purple for links */
-  text-decoration: underline;
-  transition: color 0.3s ease;
+    color: #6d28d9; /* Purple for links */
+    text-decoration: underline;
+    transition: color 0.3s ease;
 }
 
 a:hover {
-  color: #4c1d95; /* Darker purple on hover */
+    color: #4c1d95; /* Darker purple on hover */
 }
 
 /* Leaflet Fixes */
 .leaflet-marker-icon.leaflet-div-icon {
-  background: none;
-  border: none !important;
+    background: none;
+    border: none !important;
 }
 
 .leaflet-cluster-anim .leaflet-marker-icon,
 .leaflet-cluster-anim .leaflet-marker-shadow {
-  -webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
-  -moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
-  -o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
-  transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+    -webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
+    -moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+    -o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-in;
 }
 
 .leaflet-cluster-spider-leg {
-  /* stroke-dashoffset (duration and function) should match with leaflet-marker-icon transform in order to track it exactly */
-  -webkit-transition: -webkit-stroke-dashoffset 0.3s ease-out, -webkit-stroke-opacity 0.3s ease-in;
-  -moz-transition: -moz-stroke-dashoffset 0.3s ease-out, -moz-stroke-opacity 0.3s ease-in;
-  -o-transition: -o-stroke-dashoffset 0.3s ease-out, -o-stroke-opacity 0.3s ease-in;
-  transition: stroke-dashoffset 0.3s ease-out, stroke-opacity 0.3s ease-in;
+    /* stroke-dashoffset (duration and function) should match with leaflet-marker-icon transform in order to track it exactly */
+    -webkit-transition: -webkit-stroke-dashoffset 0.3s ease-out, -webkit-stroke-opacity 0.3s ease-in;
+    -moz-transition: -moz-stroke-dashoffset 0.3s ease-out, -moz-stroke-opacity 0.3s ease-in;
+    -o-transition: -o-stroke-dashoffset 0.3s ease-out, -o-stroke-opacity 0.3s ease-in;
+    transition: stroke-dashoffset 0.3s ease-out, stroke-opacity 0.3s ease-in;
 }
