@@ -2,9 +2,11 @@ import { Leaf } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
+import { Building, Building2, GraduationCap, Cross, Factory, LandmarkIcon, BookOpen, ShoppingBag, PersonStanding } from 'lucide-react';
 
 import NavMenu from '#components/common/NavMenu';
 import { AppConfig } from '#lib/AppConfig';
+import { Category } from '#lib/MarkerCategories';
 
 import majorityRaceAllocationImg from '#lib/figures/majority_race_blue.png';
 import tauVsTotalImpactImg from '#lib/figures/tau_vs_total_impact.png';
@@ -19,15 +21,15 @@ const Home = () => {
   return (
     <div className="container mx-auto max-w-2xl p-3 max-md:max-w-none">
       <Head>
-        <title>Addressing Voter Turnout Disparities through Data-Driven Resource Allocation</title>
+        <title>Optimizing Voter Turnout: Data-Driven Resource Allocation in Georgia</title>
         <meta
           property="og:title"
-          content="Addressing Voter Turnout Disparities through Data-Driven Resource Allocation"
+          content="Optimizing Voter Turnout: Data-Driven Resource Allocation in Georgia"
           key="title"
         />
         <meta
           name="description"
-          content="A data-driven approach to optimizing polling station placement in Georgia using Structural Causal Models (SCMs) and Mixed Integer Programming (MIP)."
+          content="A comprehensive analysis of polling station optimization in Georgia using Structural Causal Models (SCMs) and Mixed Integer Programming (MIP) to address voter turnout disparities."
         />
       </Head>
       <header className="items-top mt-6 gap-4 md:flex">
@@ -35,170 +37,130 @@ const Home = () => {
           <Leaf size={AppConfig.ui.bigIconSize} className="mt-2" />
         </span>
         <div>
-          <h1 className="text-5xl font-extrabold">Addressing Voter Turnout Disparities</h1>
-          <h2 className="mb-10 text-4xl font-bold">Through Data-Driven Resource Allocation</h2>
+          <h1 className="text-5xl font-extrabold">Optimizing Voter Turnout</h1>
+          <h2 className="mb-10 text-4xl font-bold">Data-Driven Resource Allocation in Georgia</h2>
         </div>
       </header>
 
       {/* Background Section */}
       <section className="mb-8">
-        <h3 className="mb-4 text-2xl font-bold">Abstract</h3>
+        <h3 className="mb-4 text-2xl font-bold">Executive Summary</h3>
         <p className="mb-4">
-          Voter turnout disparities persist across racial and socioeconomic groups, limiting fair democratic
-          participation. Despite efforts to increase overall voter engagement, inequities in{' '}
-          <strong>resource allocation</strong> continue to disproportionately affect underserved communities. This
-          project addresses the challenge by leveraging <strong>Structural Causal Models (SCMs)</strong> and{' '}
-          <strong>Mixed Integer Programming (MIP)</strong> to optimize polling station placement in Georgia,
-          with the dual objectives of maximizing overall turnout and reducing racial disparities.
+          Persistent disparities in voter turnout across racial and socioeconomic groups continue to challenge democratic participation. While various initiatives aim to increase overall voter engagement, inequities in <strong>resource allocation</strong> disproportionately affect underserved communities. This research project addresses these challenges by employing <strong>Structural Causal Models (SCMs)</strong> and <strong>Mixed Integer Programming (MIP)</strong> to optimize polling station placement in Georgia, with dual objectives of maximizing overall turnout while reducing racial disparities.
         </p>
       </section>
 
       {/* Introduction Section */}
       <section className="mb-8">
-        <h3 className="mb-4 text-2xl font-bold">Background</h3>
+        <h3 className="mb-4 text-2xl font-bold">Research Context</h3>
         <p className="mb-4">
-          Georgia played a pivotal role in the 2020 U.S. presidential election as a closely contested{' '}
-          swing state. For the first time since 1992, Georgia voted for a Democratic presidential candidate,
-          with Joe Biden securing a narrow victory by approximately <strong>11,779 votes (0.24%)</strong>.
-          This shift highlighted the state’s evolving political landscape, driven by demographic changes,
-          grassroots mobilization, and shifts in voter engagement patterns.
+          Georgia emerged as a pivotal swing state in the 2020 U.S. presidential election, marking its first Democratic presidential victory since 1992. Joe Biden secured a narrow margin of <strong>11,779 votes (0.24%)</strong>, highlighting the state's evolving political landscape. This shift was driven by demographic changes, grassroots mobilization, and evolving voter engagement patterns.
         </p>
         <p className="mb-4">
-          High voter turnout, particularly among historically <strong>underrepresented communities</strong>,
-          was instrumental in this outcome, yet systemic barriers remained. Issues such as long wait times,
-          polling place closures, and unequal resource distribution disproportionately affected certain
-          groups, raising concerns about equitable access to voting.
+          While high voter turnout, particularly among historically <strong>underrepresented communities</strong>, was crucial to this outcome, systemic barriers persisted. Issues such as extended wait times, polling place closures, and unequal resource distribution continued to disproportionately affect certain demographic groups, raising concerns about equitable voting access.
         </p>
         <p className="mb-4">
-          To ensure that race and gender do not introduce undue bias into voter turnout predictions, our
-          approach seeks to optimize polling station placements while incorporating fairness constraints. By
-          leveraging election data and census demographics, our framework identifies actionable strategies
-          that promote fair and efficient resource allocation, ensuring that every voter has an equal
-          opportunity to participate in the democratic process.
+          Our research framework addresses these challenges by incorporating fairness constraints into polling station optimization. By analyzing election data and census demographics, we develop actionable strategies that promote equitable resource allocation while ensuring efficient voter participation across all communities.
         </p>
       </section>
 
       {/* Methods Section */}
       <section className="mb-8">
-        <h3 className="mb-4 text-2xl font-bold">Methods</h3>
-        <h4 className="mb-3 text-xl font-bold">Causal Models for Decision Impact</h4>
+        <h3 className="mb-4 text-2xl font-bold">Methodology</h3>
+        <h4 className="mb-3 text-xl font-bold">Causal Modeling Framework</h4>
         <p className="mb-4">
-          The framework formalizes the problem of discriminatory impact using{' '}
-          <strong>Structural Causal Models (SCMs)</strong>, which represent relationships between decisions,
-          societal factors, and their impacts as directed acyclic graphs (DAGs). In this setup:
+          Our framework employs <strong>Structural Causal Models (SCMs)</strong> to formalize the relationship between resource allocation decisions and their societal impacts. The model is represented as a directed acyclic graph (DAG) with the following components:
         </p>
         <ul className="mb-4 list-disc pl-5">
           <li>
-            <strong>A</strong>: A set of protected attributes (e.g., race, gender) that are legally protected
-            against discrimination.
+            <strong>Protected Attributes (A)</strong>: Demographic characteristics protected against discrimination (e.g., race, gender)
           </li>
           <li>
-            <strong>X</strong>: A set of other features that influence decisions but are not legally protected.
+            <strong>Decision Variables (X)</strong>: Features influencing allocation decisions but not legally protected
           </li>
           <li>
-            <strong>Y</strong>: The outcome.
+            <strong>Outcome Measures (Y)</strong>: Key performance indicators including voter turnout and equity metrics
           </li>
         </ul>
         <p className="mb-4">
-          Unlike traditional causal models that represent one general case, this paper takes an{' '}
-          <strong>individualized approach</strong>. Each unit of study (e.g., individuals, groups) and their
-          associated variables are treated as nodes in the causal graph, allowing for a richer understanding
-          of decision impacts.
+          Our approach adopts an <strong>individualized modeling strategy</strong>, treating each geographic unit as a distinct node in the causal graph. This granular approach enables precise analysis of decision impacts across different communities.
         </p>
       </section>
 
       {/* Results Section */}
       <section className="mb-8">
-        <h3 className="mb-4 text-2xl font-bold">Results</h3>
+        <h3 className="mb-4 text-2xl font-bold">Key Findings</h3>
         <p className="mb-4">
-          We analyze the impact of polling station allocation under different fairness constraints ((τ)),
-          examining how the intervention allocation affects racial equity and overall voter turnout. Our
-          findings highlight the trade-off between fairness and total turnout impact.
+          Our analysis examines the relationship between fairness constraints (τ) and their impact on both racial equity and overall voter turnout. The findings reveal important trade-offs between fairness and total turnout impact.
         </p>
 
         {/* Impact-Fairness Tradeoff */}
-        <h4 className="mb-3 text-xl font-semibold">Trade-off Between Fairness and Impact</h4>
+        <h4 className="mb-3 text-xl font-semibold">Fairness-Impact Trade-off Analysis</h4>
         <div className="flex flex-col items-center gap-4 md:flex-row">
           <img
             src={majorityRaceAllocationImg.src}
-            alt="Majority Race Allocation"
+            alt="Distribution of Interventions by Majority Race"
             className="w-full md:w-1/2"
             onError={() => console.error('Failed to load Majority Race Allocation image')}
           />
           <img
             src={tauVsTotalImpactImg.src}
-            alt="Tau vs Total Impact"
+            alt="Impact Analysis by Fairness Constraint"
             className="w-full md:w-1/2"
             onError={() => console.error('Failed to load Tau vs Total Impact image')}
           />
         </div>
         <p className="mb-4">
-          Figure above illustrates how tightening or loosening the fairness constraint ((τ)) affects both
-          intervention allocation and overall turnout impact.
+          The analysis above demonstrates how varying the fairness constraint (τ) affects both intervention allocation and overall turnout impact.
         </p>
 
         <ul className="mb-4 list-disc pl-5">
           <li>
-            <strong>Left plot:</strong> Shows the number of interventions allocated to counties by the
-            majority race of each county.
+            <strong>Left Panel</strong>: Intervention allocation patterns by county majority race
             <ul className="list-disc pl-5">
-              <li>
-                As (τ) increases (stricter fairness), interventions become more equitably distributed across
-                racial groups.
-              </li>
-              <li>
-                At lower (τ), more interventions are allocated to white-majority counties, whereas higher (τ)
-                enforces a more balanced allocation.
-              </li>
+              <li>Increasing τ (stricter fairness) leads to more equitable distribution across racial groups</li>
+              <li>Lower τ values result in disproportionate allocation to white-majority counties</li>
+              <li>Higher τ values enforce more balanced distribution</li>
             </ul>
           </li>
           <li>
-            <strong>Right plot:</strong> Shows the impact achieved by different fairness constraints ((τ)).
+            <strong>Right Panel</strong>: Impact analysis by fairness constraint
             <ul className="list-disc pl-5">
-              <li>The total voter turnout impact increases as (τ) increases, but the rate of change varies.</li>
-              <li>
-                When (τ) is small (i.e., the fairness constraint is tight), loosening the constraint results
-                in a substantial rise in impact.
-              </li>
-              <li>
-                Around (τ = 0.43), there is an inflection point where further relaxing fairness constraints
-                leads to minor impact gains.
-              </li>
+              <li>Total turnout impact increases with τ, with varying rates of change</li>
+              <li>Significant impact gains observed when relaxing tight constraints (low τ)</li>
+              <li>Diminishing returns observed around τ = 0.43</li>
             </ul>
           </li>
         </ul>
 
         {/* Spatial Distribution of Interventions */}
-        <h4 className="mb-3 text-xl font-semibold">Spatial Distribution of Interventions</h4>
+        <h4 className="mb-3 text-xl font-semibold">Geographic Distribution Analysis</h4>
         <img
           src={spatialDistributionMapsImg.src}
-          alt="Spatial Distribution of Interventions"
+          alt="Spatial Distribution of Polling Interventions"
           className="w-full"
           onError={() => console.error('Failed to load Spatial Distribution Maps image')}
         />
         <p className="mb-4">
-          This set of four maps visualizes the impact of different polling station allocation strategies
-          across Georgia.
+          The four maps illustrate different polling station allocation strategies across Georgia:
         </p>
         <ul className="mb-4 list-disc pl-5">
           <li>
-            <strong>Baseline (All Counties)</strong>: Initial distribution before new allocations.
+            <strong>Baseline Distribution</strong>: Initial polling station configuration
           </li>
           <li>
-            <strong>Random Polling</strong>: Allocations are scattered without a clear pattern.
+            <strong>Random Allocation</strong>: Unstructured distribution without optimization
           </li>
           <li>
-            <strong>Unconstrained Polling</strong>: Maximizes turnout impact but favors historically
-            high-turnout counties.
+            <strong>Unconstrained Optimization</strong>: Maximum turnout impact without fairness considerations
           </li>
           <li>
-            <strong>Constrained Polling ((τ = 0.38))</strong>: Allocations account for racial equity but
-            slightly reduce overall impact.
+            <strong>Fairness-Constrained (τ = 0.38)</strong>: Balanced approach considering both impact and equity
           </li>
         </ul>
 
-        {/* Table of Impact per Racial Group */}
-        <h4 className="mb-3 text-xl font-semibold">Racial Group-Specific Impact</h4>
+        {/* Racial Group Impact Analysis */}
+        <h4 className="mb-3 text-xl font-semibold">Demographic Impact Analysis</h4>
 
         {/* Toggle button for chart/table view */}
         <div className="flex justify-end mb-4">
@@ -244,11 +206,11 @@ const Home = () => {
         {/* Table view */}
         {!showChart && (
           <div className="mb-6 overflow-x-auto">
-            <h5 className="text-center mb-2 text-lg font-medium">Table 1: Impact per Racial Group under Different Constraints</h5>
+            <h5 className="text-center mb-2 text-lg font-medium">Table 1: Demographic Impact Analysis by Allocation Strategy</h5>
             <table className="w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-200">
-                  <th className="border border-gray-300 px-4 py-2">Race</th>
+                  <th className="border border-gray-300 px-4 py-2">Strategy</th>
                   <th className="border border-gray-300 px-4 py-2">A</th>
                   <th className="border border-gray-300 px-4 py-2">B</th>
                   <th className="border border-gray-300 px-4 py-2">C</th>
@@ -280,7 +242,7 @@ const Home = () => {
                   <td className="border border-gray-300 px-4 py-2">9.3306</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-medium">0.38</td>
+                  <td className="border border-gray-300 px-4 py-2 font-medium">τ = 0.38</td>
                   <td className="border border-gray-300 px-4 py-2">42.1366</td>
                   <td className="border border-gray-300 px-4 py-2">61.7695</td>
                   <td className="border border-gray-300 px-4 py-2">0.3282</td>
@@ -290,7 +252,7 @@ const Home = () => {
                   <td className="border border-gray-300 px-4 py-2">4.2802</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-medium">0.39</td>
+                  <td className="border border-gray-300 px-4 py-2 font-medium">τ = 0.39</td>
                   <td className="border border-gray-300 px-4 py-2">35.8717</td>
                   <td className="border border-gray-300 px-4 py-2">67.9293</td>
                   <td className="border border-gray-300 px-4 py-2">0.3907</td>
@@ -300,7 +262,7 @@ const Home = () => {
                   <td className="border border-gray-300 px-4 py-2">4.1351</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-medium">No Tau</td>
+                  <td className="border border-gray-300 px-4 py-2 font-medium">No Constraint</td>
                   <td className="border border-gray-300 px-4 py-2">32.2645</td>
                   <td className="border border-gray-300 px-4 py-2">72.8490</td>
                   <td className="border border-gray-300 px-4 py-2">0.4420</td>
@@ -315,20 +277,21 @@ const Home = () => {
         )}
 
         <p className="mb-4">
-          The {showChart ? 'chart' : 'table'} above quantifies the turnout impact across different racial
-          groups under various allocation strategies. Note that "No Intervention" values (all zeros) are{' '}
-          {showChart ? 'omitted for better visualization' : 'included for reference'}.
+          The {showChart ? 'chart' : 'table'} above quantifies the turnout impact across different demographic groups under various allocation strategies. The "No Intervention" baseline (all zeros) is {showChart ? 'omitted for clarity' : 'included for reference'}.
         </p>
 
         {/* Key Takeaways */}
-        <h4 className="mb-3 text-xl font-semibold">Key Takeaways</h4>
+        <h4 className="mb-3 text-xl font-semibold">Key Findings</h4>
         <ul className="mb-4 list-disc pl-5">
           <li>
-            Stricter fairness constraints ((τ)) lead to a more balanced allocation while maintaining
-            near-optimal turnout impact.
+            Stricter fairness constraints (τ) achieve more equitable distribution while maintaining near-optimal turnout impact
           </li>
-          <li>Fairness constraints better align with racial equity goals.</li>
-          <li>Unconstrained allocation maximizes turnout but reinforces turnout disparities.</li>
+          <li>
+            Fairness-constrained allocation better aligns with racial equity objectives
+          </li>
+          <li>
+            Unconstrained optimization maximizes turnout but exacerbates existing disparities
+          </li>
         </ul>
       </section>
 
@@ -351,56 +314,61 @@ const Home = () => {
                   <title>Georgia.gov logo</title>
                   <path d="m14.607 57.925.665-.026h.116l.551-.025h.142l.52-.033h.138l.53-.045h.112l.574-.068h.058c.415-.055.826-.13 1.233-.222V43.99h-4.839v13.935h.2Zm25.409-9.286a8.767 8.767 0 0 1-7.742-4.655h-9.09a17.325 17.325 0 0 0 33.656 0h-9.083a8.767 8.767 0 0 1-7.745 4.661l.004-.006Zm-4.839 34.043h9.677v-4.838h-9.677v4.838Zm23.25 0h9.677v-4.838h-9.677v4.838Zm-46.449 0h9.677v-4.838h-9.677v4.838Zm-3.87 3.226H71.9v-1.613H8.124l-.017 1.613Zm-2.904 3.187h69.59v-1.613H5.234l-.03 1.613Zm66.697-51.517H8.124v1.613H71.9v-1.613Zm-1.964 3.187H10.088v1.613H69.94l-.003-1.613ZM6.847 59.296a38.266 38.266 0 0 1-1.485-35.72l11.077 5.502a25.728 25.728 0 0 0-2.06 6.913h8.754a17.322 17.322 0 0 1 33.746 0h8.755a25.737 25.737 0 0 0-2.062-6.906l11.077-5.503a38.266 38.266 0 0 1-1.47 35.701c.497.216.98.461 1.448.736 9.72-16.813 5.96-38.18-8.918-50.662-14.878-12.483-36.572-12.475-51.44.019C-.602 21.87-4.346 43.239 5.388 60.045c.47-.28.956-.53 1.457-.749Zm67.086-37.175-11.067 5.483a26.044 26.044 0 0 0-8.419-9.3L60.621 7.66a38.634 38.634 0 0 1 13.312 14.46ZM40.82 1.693a38.108 38.108 0 0 1 18.425 5.16l-6.165 10.62a25.78 25.78 0 0 0-12.257-3.516l-.003-12.264Zm-1.613 0V13.95a25.783 25.783 0 0 0-12.458 3.655L20.491 7.04a38.114 38.114 0 0 1 18.715-5.348Zm-20.083 6.19 6.267 10.583a26.04 26.04 0 0 0-8.231 9.167L6.095 22.15A38.637 38.637 0 0 1 19.123 7.883Zm37.97 49.845v8.552c6.128 3.532 12.237-.213 18.356 4.796l-2.58-5.335 2.58-3.226c-6.119-5-12.238-1.254-18.357-4.787ZM23.01 66.283v-8.555c-6.129 3.533-12.238-.212-18.357 4.797l2.58 3.226-2.58 5.335c6.1-5.02 12.228-1.271 18.357-4.803Zm-8.27 3.426h-.323v6.28h4.838v-6.677a31.389 31.389 0 0 1-4.529.397h.013Zm50.742-11.784h.2V43.99h-4.839v13.487c1.53.292 3.082.442 4.639.448Zm-.12 11.777a31.389 31.389 0 0 1-4.515-.393v6.68h4.838v-6.27l-.322-.017Zm-25.305-10.9a13.26 13.26 0 0 1-2.464-.219v17.648h4.839V58.603c-.784.14-1.579.21-2.375.206v-.006Z" fill="currentColor"></path>
                 </svg>
-                <span className="text-sm font-bold truncate">Interactive Map of Georgia</span>
+                <span className="text-sm font-bold truncate">Georgia Polling Station Analysis</span>
               </div>
 
-              <p className="text-xs text-gray-600 mb-4">Explore polling stations by categories</p>
+              <p className="text-xs text-gray-600 mb-4">Explore polling station distribution by category</p>
 
               {/* Map categories */}
               <div className="mt-6">
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-red-500 mr-1"></div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <LandmarkIcon className="h-4 w-4 text-red-500" />
                     <span className="text-xs">State Agency (3)</span>
                   </div>
 
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-blue-500 mr-1"></div>
+                  <div className="flex items-center space-x-2">
+                    <ShoppingBag className="h-4 w-4 text-blue-500" />
                     <span className="text-xs">Business (7)</span>
                   </div>
 
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-purple-500 mr-1"></div>
+                  <div className="flex items-center space-x-2">
+                    <Cross className="h-4 w-4 text-purple-500" />
                     <span className="text-xs">Church (749)</span>
                   </div>
 
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-yellow-600 mr-1"></div>
+                  <div className="flex items-center space-x-2">
+                    <GraduationCap className="h-4 w-4 text-yellow-600" />
                     <span className="text-xs">College (7)</span>
                   </div>
 
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-green-500 mr-1"></div>
+                  <div className="flex items-center space-x-2">
+                    <Building className="h-4 w-4 text-green-500" />
                     <span className="text-xs">County (260)</span>
                   </div>
 
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-orange-500 mr-1"></div>
+                  <div className="flex items-center space-x-2">
+                    <BookOpen className="h-4 w-4 text-orange-500" />
                     <span className="text-xs">Education (398)</span>
                   </div>
 
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-teal-500 mr-1"></div>
+                  <div className="flex items-center space-x-2">
+                    <Building2 className="h-4 w-4 text-teal-500" />
                     <span className="text-xs">Municipal (71)</span>
                   </div>
 
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-pink-500 mr-1"></div>
+                  <div className="flex items-center space-x-2">
+                    <Factory className="h-4 w-4 text-gray-600" />
+                    <span className="text-xs">Industrial (12)</span>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <LandmarkIcon className="h-4 w-4 text-pink-500" />
                     <span className="text-xs">Other (28)</span>
                   </div>
 
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-pink-500 mr-1"></div>
+                  <div className="flex items-center space-x-2">
+                    <PersonStanding className="h-4 w-4 text-gray-400" />
                     <span className="text-xs">Unclassified (1155)</span>
                   </div>
                 </div>
@@ -411,7 +379,7 @@ const Home = () => {
             <div className="relative md:w-3/4">
               <img
                 src={georgiaMapImg.src}
-                alt="Interactive Map of Georgia Polling Stations"
+                alt="Georgia Polling Station Distribution Map"
                 className="w-full h-[400px] object-cover"
                 onError={() => console.error('Failed to load map image')}
               />
@@ -442,7 +410,7 @@ const Home = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                     <span className="hidden group-hover:inline-flex items-center">
-                      View live map
+                      Explore Interactive Map
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                       </svg>
@@ -465,7 +433,7 @@ const Home = () => {
                     </div>
                     <img
                       src={georgiaMapImg.src}
-                      alt="Mobile preview"
+                      alt="Mobile preview of Georgia map"
                       className="w-full h-full object-cover"
                       onError={() => console.error('Failed to load mobile preview')}
                     />
@@ -476,14 +444,14 @@ const Home = () => {
           </div>
         </div>
         <p className="mt-8 text-sm text-gray-600">
-          Explore our interactive map to visualize polling station distribution, demographic data, and the impact of different allocation strategies across Georgia counties. Click "View live map" to access the full interactive experience.
+          Access our comprehensive interactive visualization to examine polling station distribution patterns, demographic characteristics, and the effectiveness of various allocation strategies across Georgia's counties. Click "Explore Interactive Map" to begin your analysis.
         </p>
       </section>
 
       {/* Content Section */}
       <section className="mb-8">
         <div className="flex flex-col md:flex-row items-center justify-between bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h3 className="text-2xl font-bold mb-4 md:mb-0">Quick Navigation</h3>
+          <h3 className="text-2xl font-bold mb-4 md:mb-0">Navigation</h3>
           <div className="w-full md:w-auto">
             <NavMenu />
           </div>
@@ -493,12 +461,12 @@ const Home = () => {
       {/* Footer */}
       <footer className="mt-12 flex justify-between rounded bg-light p-3 text-sm">
         <div>
-          © 2024 GA Research. Content available for academic use. <br />
+          © 2024 Georgia Voting Research. All rights reserved. <br />
           <Link
             href="https://github.com/Angelinaaaaaaaaaaaa/GA_Addressing_Voter_Turnout_Inequalies"
             className="text-primary"
           >
-            GA_Voting_Equality_Research
+            View on GitHub
           </Link>
         </div>
         <div className="text-primary">

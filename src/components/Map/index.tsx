@@ -15,6 +15,10 @@ import useMarkerData from './useMarkerData'
 import MapLegend from './ui/MapLegend'
 import StateBoundary from './StateBoundary'
 
+/**
+ * Dynamically imported components that require Leaflet
+ * These components are loaded client-side only to avoid SSR issues with Leaflet
+ */
 const LeafletCluster = dynamic(async () => (await import('./LeafletCluster')).LeafletCluster(), {
   ssr: false,
 })
@@ -31,15 +35,30 @@ const LeafletMapContainer = dynamic(async () => (await import('./LeafletMapConta
   ssr: false,
 })
 
+/**
+ * Interface defining the current view state of the map
+ * Used for tracking map boundaries and zoom level
+ */
 export interface ViewState {
+  /** Minimum latitude of the visible map area */
   minLat: number
+  /** Minimum longitude of the visible map area */
   minLng: number
+  /** Maximum latitude of the visible map area */
   maxLat: number
+  /** Maximum longitude of the visible map area */
   maxLng: number
+  /** Current zoom level of the map */
   zoomLevel: number
 }
 
-const getViewState: (map?: Leaflet.Map) => ViewState | undefined = (map?: Leaflet.Map) => {
+/**
+ * Extracts the current view state from a Leaflet map instance
+ * 
+ * @param map - The Leaflet map instance
+ * @returns The current view state or undefined if map is not available
+ */
+const getViewState = (map?: Leaflet.Map): ViewState | undefined => {
   if (!map) return undefined
 
   const bounds = map.getBounds()
@@ -58,51 +77,90 @@ const getViewState: (map?: Leaflet.Map) => ViewState | undefined = (map?: Leafle
  * Props interface for the Map component
  */
 interface MapProps {
+  /** Callback function when clusters data changes */
   onClustersChange?: (clusters: Record<Category, PlacesType>) => void;
-  onHiddenCategoriesChange?: (categories: Category[]) => void;  // Add new prop
+  /** Callback function when hidden categories change */
+  onHiddenCategoriesChange?: (categories: Category[]) => void;
+  /** Callback function when an error occurs */
+  onError?: (error: Error) => void;
+  /** Callback function when map is fully loaded */
+  onLoad?: () => void;
 }
 
+/**
+ * Inner Map Component
+ * 
+ * Handles the core map functionality including:
+ * - Marker clustering and management
+ * - Category-based filtering
+ * - Map view state tracking
+ * - Event handling and callbacks
+ * 
+ * @param props - Component props
+ * @returns The rendered map component
+ */
 const LeafletMapInner: React.FC<MapProps> = ({ 
   onClustersChange, 
-  onHiddenCategoriesChange 
+  onHiddenCategoriesChange,
+  onError,
+  onLoad
 }) => {
-  // Initial state: hide all categories
-  const initialHiddenCategories: Category[] = []
-
-  const [hiddenCategories, setHiddenCategories] = useState<Category[]>(initialHiddenCategories)
+  // Initialize state
+  const [hiddenCategories, setHiddenCategories] = useState<Category[]>([])
   const { width: viewportWidth, height: viewportHeight, ref: viewportRef } = useResizeDetector()
   const { map } = useMapContext()
   const [viewState, setViewState] = useState(getViewState(map))
 
+  /**
+   * Handles toggling visibility of marker categories
+   * 
+   * @param category - The category to toggle
+   * @param visible - Whether the category should be visible
+   */
   const handleCategoryToggle = useCallback((category: Category, visible: boolean) => {
     setHiddenCategories(prev =>
-        visible
-            ? prev.filter(c => c !== category)
-            : [...prev, category]
+      visible
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
     )
   }, [])
 
+  /**
+   * Shows all marker categories
+   * Clears the hidden categories list
+   */
   const handleShowAll = useCallback(() => {
     setHiddenCategories([])
   }, [])
 
+  /**
+   * Hides all marker categories
+   * Sets all categories to hidden state
+   */
   const handleHideAll = useCallback(() => {
-  setHiddenCategories(Object.values(Category).map(category => category as Category))
+    setHiddenCategories(Object.values(Category).map(category => category as Category))
   }, [])
 
-  // Debounced view state update
+  /**
+   * Debounced handler for map movement events
+   * Updates the view state after map movement stops
+   * Uses a 250ms debounce to prevent excessive updates
+   */
   const handleMapMoveEnd = useCallback(
-      debounce(() => {
-        setViewState(getViewState(map))
-      }, 250),
-      [map]
+    debounce(() => {
+      setViewState(getViewState(map))
+    }, 250),
+    [map]
   )
 
+  // Load marker data
   const markerQueryResponse = Places as PlacesType | undefined
   if (!markerQueryResponse) {
     console.warn('Places data is undefined')
+    onError?.(new Error('Failed to load places data'))
   }
 
+  // Set up map event listeners
   useEffect(() => {
     if (!map) return undefined
 
@@ -114,6 +172,7 @@ const LeafletMapInner: React.FC<MapProps> = ({
     }
   }, [map, handleMapMoveEnd])
 
+  // Process marker data
   const { clustersByCategory, allMarkersBoundCenter } = useMarkerData({
     locations: markerQueryResponse,
     map,
@@ -121,17 +180,14 @@ const LeafletMapInner: React.FC<MapProps> = ({
     viewportHeight,
   })
 
-  // Update parent component with current clusters
+  // Update parent component with cluster changes
   useEffect(() => {
     if (clustersByCategory && onClustersChange) {
       onClustersChange(clustersByCategory);
     }
   }, [clustersByCategory, onClustersChange]);
 
-  /**
-   * Update parent component when hidden categories change
-   * This ensures statistics panel is in sync with map legend
-   */
+  // Update parent component with category visibility changes
   useEffect(() => {
     if (onHiddenCategoriesChange) {
       onHiddenCategoriesChange(hiddenCategories);
@@ -140,14 +196,17 @@ const LeafletMapInner: React.FC<MapProps> = ({
 
   const isLoading = !map || !viewportWidth || !viewportHeight
 
-  /** watch position & zoom of all markers */
+  /**
+   * Initialize map view to show all markers
+   * Centers the map on all markers and sets appropriate zoom level
+   */
   useEffect(() => {
     if (!allMarkersBoundCenter || !map) return
 
-    // Add a small delay to ensure map is fully initialized
     const timer = setTimeout(() => {
       const moveEnd = () => {
         map.off('moveend', moveEnd);
+        onLoad?.(); // Notify parent when map is fully initialized
       };
     
       try {
@@ -158,87 +217,95 @@ const LeafletMapInner: React.FC<MapProps> = ({
         map.once('moveend', moveEnd);
       } catch (error) {
         console.warn('Map flyTo failed:', error);
+        onError?.(error instanceof Error ? error : new Error('Failed to initialize map'));
       }
     }, 100);
     
     return () => {
       clearTimeout(timer);
     };
-  }, [allMarkersBoundCenter, map]);
+  }, [allMarkersBoundCenter, map, onLoad, onError]);
 
   return (
+    <div
+      className="absolute w-full overflow-hidden"
+      ref={viewportRef}
+      style={{ height: 'calc(100vh - 240px)' }}
+    >
+      <MapTopBar />
       <div
-          className="absolute w-full overflow-hidden"
-          ref={viewportRef}
-          style={{ height: 'calc(100vh - 240px)' }}
+        className={`absolute left-0 w-full transition-opacity ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+        style={{
+          top: AppConfig.ui.topBarHeight,
+          width: viewportWidth ?? '100%',
+          height: viewportHeight ? viewportHeight - AppConfig.ui.topBarHeight : '100%',
+        }}
       >
-        <MapTopBar />
-        <div
-            className={`absolute left-0 w-full transition-opacity ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-            style={{
-              top: AppConfig.ui.topBarHeight,
-              width: viewportWidth ?? '100%',
-              height: viewportHeight ? viewportHeight - AppConfig.ui.topBarHeight : '100%',
-            }}
-        >
-          {allMarkersBoundCenter && clustersByCategory && (
-              <div className="h-full w-full">
-                <LeafletMapContainer
+        {allMarkersBoundCenter && clustersByCategory && (
+          <div className="h-full w-full">
+            <LeafletMapContainer
+              center={allMarkersBoundCenter.centerPos}
+              zoom={allMarkersBoundCenter.minZoom}
+              maxZoom={AppConfig.maxZoom}
+              minZoom={AppConfig.minZoom}
+            >
+              {!isLoading ? (
+                <>
+                  <StateBoundary />
+                  <CenterToMarkerButton
                     center={allMarkersBoundCenter.centerPos}
                     zoom={allMarkersBoundCenter.minZoom}
-                    maxZoom={AppConfig.maxZoom}
-                    minZoom={AppConfig.minZoom}
-                >
-                  {!isLoading ? (
-                      <>
-                        <StateBoundary />
-
-                        <CenterToMarkerButton
-                            center={allMarkersBoundCenter.centerPos}
-                            zoom={allMarkersBoundCenter.minZoom}
-                        />
-                        <LocateButton />
-                        {Object.entries(clustersByCategory).map(([categoryStr, markers]) => {
-                          const category = Number(categoryStr) as Category;
-                          if (hiddenCategories.includes(category)) {
-                            return null;
-                          }
-                          return (
-                              <LeafletCluster
-                                  key={category}
-                                  icon={MarkerCategories[category].icon}
-                                  color="#3B82F6"  // Replace with your desired color
-                                  chunkedLoading
-                              >
-                                {markers.map((marker) => (
-                                    <CustomMarker place={marker} key={marker.id} />
-                                ))}
-                              </LeafletCluster>
-                          );
-                        })}
-                        <MapLegend
-                            onCategoryToggle={handleCategoryToggle}
-                            hiddenCategories={hiddenCategories}
-                            onShowAll={handleShowAll}
-                            onHideAll={handleHideAll}  // 将 onReset 改为 onHideAll
-                        />
-                      </>
-                  ) : (
-                      <></>
-                  )}
-                </LeafletMapContainer>
-              </div>
-          )}
-        </div>
+                  />
+                  <LocateButton />
+                  {Object.entries(clustersByCategory).map(([categoryStr, markers]) => {
+                    const category = Number(categoryStr) as Category;
+                    if (hiddenCategories.includes(category)) {
+                      return null;
+                    }
+                    return (
+                      <LeafletCluster
+                        key={category}
+                        icon={MarkerCategories[category].icon}
+                        color="#3B82F6"
+                        chunkedLoading
+                      >
+                        {markers.map((marker) => (
+                          <CustomMarker place={marker} key={marker.id} />
+                        ))}
+                      </LeafletCluster>
+                    );
+                  })}
+                  <MapLegend
+                    onCategoryToggle={handleCategoryToggle}
+                    hiddenCategories={hiddenCategories}
+                    onShowAll={handleShowAll}
+                    onHideAll={handleHideAll}
+                  />
+                </>
+              ) : (
+                <></>
+              )}
+            </LeafletMapContainer>
+          </div>
+        )}
       </div>
+    </div>
   )
 }
 
-// pass through to get context in <MapInner>
+/**
+ * Main Map Component
+ * 
+ * Wraps the inner map component with the required context provider.
+ * This ensures that all child components have access to the map context.
+ * 
+ * @param props - Component props
+ * @returns The rendered map component with context
+ */
 const Map: React.FC<MapProps> = (props) => (
-    <LeafleftMapContextProvider>
-      <LeafletMapInner {...props} />
-    </LeafleftMapContextProvider>
+  <LeafleftMapContextProvider>
+    <LeafletMapInner {...props} />
+  </LeafleftMapContextProvider>
 )
 
 export default Map
