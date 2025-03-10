@@ -14,6 +14,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import {useState} from 'react';
 
+import "katex/dist/katex.min.css";
+import { BlockMath, InlineMath } from "react-katex";
 import NavMenu from '#components/common/NavMenu';
 import {AppConfig} from '#lib/AppConfig';
 
@@ -27,80 +29,6 @@ import georgiaMapImg from '#lib/figures/georgia_map.png';
 
 import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
 
-// const Home = () => {
-//     const [showChart, setShowChart] = useState(true);
-
-//     return (
-//         <div className="container mx-auto max-w-2xl p-3 max-md:max-w-none">
-//                 <Head>
-//                 <title>Optimizing Voter Turnout: Data-Driven Resource Allocation in Georgia</title>
-//                 <meta
-//                     property="og:title"
-//                     content="Optimizing Voter Turnout: Data-Driven Resource Allocation in Georgia"
-//                     key="title"
-//                 />
-//                 <meta
-//                     name="description"
-//                     content="A comprehensive analysis of polling station optimization in Georgia using Structural Causal Models (SCMs) and Mixed Integer Programming (MIP) to address voter turnout disparities."
-//                 />
-//             </Head>
-//             <header className="items-top mt-6 gap-4 md:flex">
-//         <span className="text-primary">
-//           <Leaf size={AppConfig.ui.bigIconSize} className="mt-2"/>
-//         </span>
-//                 <div>
-//                     <h1 className="text-5xl font-extrabold">Optimizing Voter Turnout</h1>
-//                     <h2 className="mb-10 text-4xl font-bold">Data-Driven Resource Allocation in Georgia</h2>
-//                 </div>
-//                 <img src={voteImg.src} alt="vote image"style={{ width: '950px', height: 'auto' }} className="mb-4 mx-auto"/>
-//             </header>
-
-            
-//             {/* Authors Section */}
-//             <section>
-//                 <p>
-//                     <strong>Authors:</strong> Angelina Zhang (<a href="mailto:ruz039@ucsd.edu">ruz039@ucsd.edu</a>) ;
-//                     Cici Xu (<a href="mailto:xix015@ucsd.edu">xix015@ucsd.edu</a>)   
-//                     {'   '}<strong>Mentor:</strong> Babak Salimi (<a href="mailto:bsalimi@ucsd.edu">bsalimi@ucsd.edu</a>)
-//                 </p>
-//             </section>
-
-
-
-//             {/* Background Section */}
-//             <section className="mb-8">
-//                 <h3 className="mb-4 text-2xl font-bold">Introduction</h3>
-//                 <p className="mb-4">
-//                     Do you know that persistent disparities in voter turnout across racial and socioeconomic groups continue to challenge 
-//                     democratic participation? While various initiatives aim to increase overall voter engagement, inequities in <strong>resource allocation</strong> disproportionately affect underserved communities. 
-//                 </p>
-//                 <img 
-//                     src={gapImg.src} 
-//                     alt="Growing voter turnout gap image" 
-//                     style={{ width: '800px', height: 'auto' }} 
-//                     className="mb-4 mx-auto" 
-//                 />
-
-//                 <p className="text-center text-sm">
-//                 Source:{' '} <a href="https://www.brennancenter.org/our-work/research-reports/growing-racial-disparities-voter-turnout-2008-2022" target="_blank" rel="noopener noreferrer"> Brennan Center for Justice</a>
-//                 </p>
-
-//                 <p className="mb-4">
-//                     <strong>What if smarter polling station placement could significantly boost voter turnout — especially in communities that have been historically underserved?</strong> 
-//                     {' '}Our project uses <strong>Structural Causal Models (SCMs)</strong> and <strong>Mixed Integer Programming (MIP)</strong> to strategically optimize polling station placement aiming to:
-//                 </p>
-//                 <ul className="mb-4 list-disc pl-5">
-//                     <li>Maximize overall voter turnout.</li>
-//                     <li>Reduce racial disparities in voting access.</li>
-//                     <li>Operate within a fixed budget.</li>
-//                 </ul>
-//                 <p className="mb-4">
-//                     By combining election data, census demographics, and fairness constraints, we build models that answer a critical question:
-//                 </p>
-//                 <p className="mb-4">
-//                      <strong>Where should polling stations go to make the most impact — both in turnout and equity?</strong>
-//                 </p>
-//             </section>
 const Home = () => {
     const [showChart, setShowChart] = useState(true);
 
@@ -121,19 +49,19 @@ const Home = () => {
 
             <header className="flex flex-col md:flex-row items-start mt-6 gap-6">
                 {/* Left Side: Title + Authors */}
-                <div className="flex flex-col md:w-1/3">
+                <div className="flex flex-col md:w-1/4"> {/* Narrowing the left part */}
                     {/* Title with Leaf Icon */}
-                    <div className="flex items-center gap-3">
-                        <h1 className="text-5xl font-extrabold flex items-center">
-                            <span className="text-primary mt-2">
-                                <Leaf size={AppConfig.ui.bigIconSize} />
-                            </span>
+                    <div className="flex items-center gap-2"> {/* Adjusting gap for logo placement */}
+                        <span className="text-primary mt-2">
+                            <Leaf size={AppConfig.ui.bigIconSize} />
+                        </span>
+                        <h1 className="text-4xl font-extrabold flex items-center"> {/* Adjusted font size for smaller left */}
                             Optimizing Voter Turnout
                         </h1>
                     </div>
-                    <h2 className="text-4xl font-bold mb-4">Data-Driven Resource Allocation in Georgia</h2>
+                    <h2 className="text-3xl font-bold mb-4">Data-Driven Resource Allocation in Georgia</h2>
 
-                     {/* Authors Section */}
+                    {/* Authors Section */}
                     <section className="mb-4">
                         <p className="text-lg mb-1">
                             <strong>Authors:</strong>
@@ -148,7 +76,21 @@ const Home = () => {
                             <strong>Mentor:</strong> Babak Salimi (<a href="mailto:bsalimi@ucsd.edu">bsalimi@ucsd.edu</a>)
                         </p>
                     </section>
-                </div>
+
+                    {/* Report Link */}
+                    <section className="mb-4">
+                        <a 
+                            href="https://drive.google.com/file/d/1ngrmoCRB6wwDzpOtovAMqEjX7CGzxBaX/view?usp=sharing"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-lg font-bold text-purple-700"
+                        >
+                            View Report
+                        </a>
+                    </section>
+
+                
+               </div>
 
                 {/* Right Side: Image */}
                 <img 
@@ -158,7 +100,7 @@ const Home = () => {
                     className="mb-4 mx-auto md:w-1/2"
                 />
             </header>
-
+       
             {/* Background Section */}
             <section className="mb-8">
                 <h3 className="mb-4 text-2xl font-bold">Introduction</h3>
@@ -193,6 +135,8 @@ const Home = () => {
                     <strong>Where should polling stations go to make the most impact — both in turnout and equity?</strong>
                 </p>
             </section>
+
+        
           
             {/* Introduction Section */}
             <section className="mb-8">
@@ -252,6 +196,55 @@ const Home = () => {
                     className="mb-4 mx-auto" 
                 />
             </section>
+
+           {/* Intervention Modeling */}
+            <section className="mb-8">
+                <h4 className="mb-3 text-xl font-bold">Intervention Modeling</h4>
+                <p className="mb-4">
+                    Interventions are modeled as binary decision variables <InlineMath math="Z(i)" />, indicating whether a policy intervention is applied to unit <InlineMath math="i" />.
+                </p>
+                <ul className="mb-4 list-disc pl-5">
+                    <li><strong><InlineMath math="Z(i) = 1" /></strong>: An intervention is applied.</li>
+                    <li><strong><InlineMath math="Z(i) = 0" /></strong>: No intervention is applied.</li>
+                </ul>
+            </section>
+
+            {/* Fairness Constraints */}
+            <section className="mb-8">
+                <h4 className="mb-3 text-xl font-bold">Fairness Constraints</h4>
+                <p className="mb-4">
+                    To ensure fairness, we impose constraints on counterfactual privilege, which measures the expected outcome difference due to protected attributes.
+                </p>
+                <p className="mb-4">
+                    The fairness constraint ensures that the disparity between actual and counterfactual outcomes remains below a threshold <InlineMath math="\tau" />:
+                </p>
+                <BlockMath math="\mathbb{E}[Y^{(i)}(a^{(i)}, \mathbf{z}) \mid A^{(i)} = a^{(i)}, X^{(i)} = x^{(i)}] - \mathbb{E}[Y^{(i)}(a', \mathbf{z}) \mid A^{(i)} = a^{(i)}, X^{(i)} = x^{(i)}] < \tau" />
+            </section>
+
+            {/* Optimization Problem */}
+            <section className="mb-8">
+                <h4 className="mb-3 text-xl font-bold">Optimization Problem</h4>
+                <p className="mb-4">
+                    Our objective is to maximize the overall benefit of interventions while adhering to fairness and budget constraints:
+                </p>
+                <BlockMath math="\max_{\mathbf{z} \in \{0,1\}^n} \sum_{i=1}^n \mathbb{E}[Y^{(i)}(a^{(i)}, \mathbf{z})]" />
+                <p className="mb-4">
+                    Subject to:
+                </p>
+                <BlockMath math="\sum_{i=1}^n z^{(i)} \leq b, \quad c_{i a'} \leq \tau, \quad \forall a', i." />
+            </section>
+
+            {/* Georgia Case Formulation */}
+            <section className="mb-8">
+                <h4 className="mb-3 text-xl font-bold">Georgia State Formulation </h4>
+                <p className="mb-4">
+                    In the Georgia dataset, we aim to increase voter turnout by allocating additional polling stations optimally. The final optimization formulation is:
+                </p>
+                <BlockMath math="\mathbb{E}\big[Y^{(i)}(\mathbf{a}, \mathbf{z}) \mid A^{(i)} = \mathbf{a}^{(i)}, P^{(i)} = \mathbf{p}^{(i)}, F^{(i)} = \mathbf{f}^{(i)}\big]" />
+                <BlockMath math="= \mathbf{\alpha}^\top \mathbf{a} \max_{\substack{j \in N(i) \\ \text{s.t. } z^{(j)} = 1}} s(i, j) P^{(j)}(\mathbf{z}) + \mathbf{\beta}^\top \mathbf{a} \max_{\substack{j \in N(i) \\ \text{s.t. } z^{(j)} = 1}} s(i, j) c^{(j)}" />
+                <BlockMath math="+ \mathbf{\gamma}^\top \mathbf{a} u^{(i)} + \mathbf{\delta}^\top \mathbf{a} t^{(i)} + \mathbf{\theta}^\top \mathbf{a}." />
+            </section>
+
 
             {/* Results Section */}
             <section className="mb-8">
