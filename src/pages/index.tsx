@@ -27,33 +27,85 @@ import georgiaMapImg from '#lib/figures/georgia_map.png';
 
 import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
 
+// const Home = () => {
+//     const [showChart, setShowChart] = useState(true);
+
+//     return (
+//         <div className="container mx-auto max-w-2xl p-3 max-md:max-w-none">
+//                 <Head>
+//                 <title>Optimizing Voter Turnout: Data-Driven Resource Allocation in Georgia</title>
+//                 <meta
+//                     property="og:title"
+//                     content="Optimizing Voter Turnout: Data-Driven Resource Allocation in Georgia"
+//                     key="title"
+//                 />
+//                 <meta
+//                     name="description"
+//                     content="A comprehensive analysis of polling station optimization in Georgia using Structural Causal Models (SCMs) and Mixed Integer Programming (MIP) to address voter turnout disparities."
+//                 />
+//             </Head>
+//             <header className="items-top mt-6 gap-4 md:flex">
+//         <span className="text-primary">
+//           <Leaf size={AppConfig.ui.bigIconSize} className="mt-2"/>
+//         </span>
+//                 <div>
+//                     <h1 className="text-5xl font-extrabold">Optimizing Voter Turnout</h1>
+//                     <h2 className="mb-10 text-4xl font-bold">Data-Driven Resource Allocation in Georgia</h2>
+//                 </div>
+//                 <img src={voteImg.src} alt="vote image"style={{ width: '950px', height: 'auto' }} className="mb-4 mx-auto"/>
+//             </header>
+
+            
+//             {/* Authors Section */}
+//             <section>
+//                 <p>
+//                     <strong>Authors:</strong> Angelina Zhang (<a href="mailto:ruz039@ucsd.edu">ruz039@ucsd.edu</a>) ;
+//                     Cici Xu (<a href="mailto:xix015@ucsd.edu">xix015@ucsd.edu</a>)   
+//                     {'   '}<strong>Mentor:</strong> Babak Salimi (<a href="mailto:bsalimi@ucsd.edu">bsalimi@ucsd.edu</a>)
+//                 </p>
+//             </section>
+
+
+
+//             {/* Background Section */}
+//             <section className="mb-8">
+//                 <h3 className="mb-4 text-2xl font-bold">Introduction</h3>
+//                 <p className="mb-4">
+//                     Do you know that persistent disparities in voter turnout across racial and socioeconomic groups continue to challenge 
+//                     democratic participation? While various initiatives aim to increase overall voter engagement, inequities in <strong>resource allocation</strong> disproportionately affect underserved communities. 
+//                 </p>
+//                 <img 
+//                     src={gapImg.src} 
+//                     alt="Growing voter turnout gap image" 
+//                     style={{ width: '800px', height: 'auto' }} 
+//                     className="mb-4 mx-auto" 
+//                 />
+
+//                 <p className="text-center text-sm">
+//                 Source:{' '} <a href="https://www.brennancenter.org/our-work/research-reports/growing-racial-disparities-voter-turnout-2008-2022" target="_blank" rel="noopener noreferrer"> Brennan Center for Justice</a>
+//                 </p>
+
+//                 <p className="mb-4">
+//                     <strong>What if smarter polling station placement could significantly boost voter turnout — especially in communities that have been historically underserved?</strong> 
+//                     {' '}Our project uses <strong>Structural Causal Models (SCMs)</strong> and <strong>Mixed Integer Programming (MIP)</strong> to strategically optimize polling station placement aiming to:
+//                 </p>
+//                 <ul className="mb-4 list-disc pl-5">
+//                     <li>Maximize overall voter turnout.</li>
+//                     <li>Reduce racial disparities in voting access.</li>
+//                     <li>Operate within a fixed budget.</li>
+//                 </ul>
+//                 <p className="mb-4">
+//                     By combining election data, census demographics, and fairness constraints, we build models that answer a critical question:
+//                 </p>
+//                 <p className="mb-4">
+//                      <strong>Where should polling stations go to make the most impact — both in turnout and equity?</strong>
+//                 </p>
+//             </section>
 const Home = () => {
     const [showChart, setShowChart] = useState(true);
 
     return (
         <div className="container mx-auto max-w-2xl p-3 max-md:max-w-none">
-            <header className="flex flex-col md:flex-row items-start mt-6 gap-4">
-            {/* Left Side: Title + Authors */}
-            <div className="flex flex-col">
-                <h1 className="text-5xl font-extrabold">Optimizing Voter Turnout</h1>
-                <h2 className="text-4xl font-bold mb-4">Data-Driven Resource Allocation in Georgia</h2>
-                
-                {/* Authors Section */}
-                <p className="text-lg">
-                <strong>Authors:</strong> Angelina Zhang (<a href="mailto:ruz039@ucsd.edu">ruz039@ucsd.edu</a>) ;
-                Cici Xu (<a href="mailto:xix015@ucsd.edu">xix015@ucsd.edu</a>)<br />
-                <strong>Mentor:</strong> Babak Salimi (<a href="mailto:bsalimi@ucsd.edu">bsalimi@ucsd.edu</a>)
-                </p>
-            </div>
-
-            {/* Right Side: Image */}
-            <img 
-                src={voteImg.src} 
-                alt="vote image" 
-                className="w-[950px] h-auto md:ml-8"
-            />
-            </header>
-
             <Head>
                 <title>Optimizing Voter Turnout: Data-Driven Resource Allocation in Georgia</title>
                 <meta
@@ -66,28 +118,46 @@ const Home = () => {
                     content="A comprehensive analysis of polling station optimization in Georgia using Structural Causal Models (SCMs) and Mixed Integer Programming (MIP) to address voter turnout disparities."
                 />
             </Head>
-            <header className="items-top mt-6 gap-4 md:flex">
-        <span className="text-primary">
-          <Leaf size={AppConfig.ui.bigIconSize} className="mt-2"/>
-        </span>
-                <div>
-                    <h1 className="text-5xl font-extrabold">Optimizing Voter Turnout</h1>
-                    <h2 className="mb-10 text-4xl font-bold">Data-Driven Resource Allocation in Georgia</h2>
+
+            <header className="flex flex-col md:flex-row items-start mt-6 gap-6">
+                {/* Left Side: Title + Authors */}
+                <div className="flex flex-col md:w-1/3">
+                    {/* Title with Leaf Icon */}
+                    <div className="flex items-center gap-3">
+                        <h1 className="text-5xl font-extrabold flex items-center">
+                            <span className="text-primary mt-2">
+                                <Leaf size={AppConfig.ui.bigIconSize} />
+                            </span>
+                            Optimizing Voter Turnout
+                        </h1>
+                    </div>
+                    <h2 className="text-4xl font-bold mb-4">Data-Driven Resource Allocation in Georgia</h2>
+
+                     {/* Authors Section */}
+                    <section className="mb-4">
+                        <p className="text-lg mb-1">
+                            <strong>Authors:</strong>
+                        </p>
+                        <p className="text-lg mb-1">
+                            Angelina Zhang (<a href="mailto:ruz039@ucsd.edu">ruz039@ucsd.edu</a>)
+                        </p>
+                        <p className="text-lg mb-1">
+                            Cici Xu (<a href="mailto:xix015@ucsd.edu">xix015@ucsd.edu</a>)
+                        </p>
+                        <p className="text-lg mb-1">
+                            <strong>Mentor:</strong> Babak Salimi (<a href="mailto:bsalimi@ucsd.edu">bsalimi@ucsd.edu</a>)
+                        </p>
+                    </section>
                 </div>
-                <img src={voteImg.src} alt="vote image"style={{ width: '950px', height: 'auto' }} className="mb-4 mx-auto"/>
+
+                {/* Right Side: Image */}
+                <img 
+                    src={voteImg.src} 
+                    alt="vote image" 
+                    style={{ width: '950px', height: 'auto' }} 
+                    className="mb-4 mx-auto md:w-1/2"
+                />
             </header>
-
-            
-            {/* Authors Section */}
-            <section>
-                <p>
-                    <strong>Authors:</strong> Angelina Zhang (<a href="mailto:ruz039@ucsd.edu">ruz039@ucsd.edu</a>) ;
-                    Cici Xu (<a href="mailto:xix015@ucsd.edu">xix015@ucsd.edu</a>)   
-                    {'   '}<strong>Mentor:</strong> Babak Salimi (<a href="mailto:bsalimi@ucsd.edu">bsalimi@ucsd.edu</a>)
-                </p>
-            </section>
-
-
 
             {/* Background Section */}
             <section className="mb-8">
@@ -104,7 +174,7 @@ const Home = () => {
                 />
 
                 <p className="text-center text-sm">
-                Source:{' '} <a href="https://www.brennancenter.org/our-work/research-reports/growing-racial-disparities-voter-turnout-2008-2022" target="_blank" rel="noopener noreferrer"> Brennan Center for Justice</a>
+                    Source:{' '} <a href="https://www.brennancenter.org/our-work/research-reports/growing-racial-disparities-voter-turnout-2008-2022" target="_blank" rel="noopener noreferrer">Brennan Center for Justice</a>
                 </p>
 
                 <p className="mb-4">
@@ -120,10 +190,10 @@ const Home = () => {
                     By combining election data, census demographics, and fairness constraints, we build models that answer a critical question:
                 </p>
                 <p className="mb-4">
-                     <strong>Where should polling stations go to make the most impact — both in turnout and equity?</strong>
+                    <strong>Where should polling stations go to make the most impact — both in turnout and equity?</strong>
                 </p>
             </section>
-
+          
             {/* Introduction Section */}
             <section className="mb-8">
                 <h3 className="mb-4 text-2xl font-bold">Research Context</h3>
