@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import type {NextPage} from 'next'
-import {useMemo, useState} from 'react'
+import {useMemo, useState, useCallback} from 'react'
 import Map from '#components/Map'
 import StatisticsPanel from '#components/Map/StatisticsPanel'
 import {PlacesType} from '#lib/Places'
@@ -27,14 +27,38 @@ const MapPage: NextPage = () => {
     const [error, setError] = useState<Error | undefined>(undefined);
 
     /**
-     * Memoized statistics data to prevent unnecessary recalculations
-     * This object is passed to the StatisticsPanel component
-     *
-     * @returns {Object} An object containing:
-     * - clustersByCategory: Current cluster data
-     * - hiddenCategories: Currently hidden marker categories
-     * - isLoading: Loading state
-     * - error: Any error state
+     * Handles clusters data updates from the map
+     */
+    const handleClustersChange = useCallback((clusters: Record<Category, PlacesType>) => {
+        setClustersByCategory(clusters);
+        setIsLoading(false);
+    }, []);
+
+    /**
+     * Handles hidden categories updates from the map
+     */
+    const handleHiddenCategoriesChange = useCallback((categories: Category[]) => {
+        setHiddenCategories(categories);
+    }, []);
+
+    /**
+     * Handles map loading errors
+     */
+    const handleMapError = useCallback((err: Error) => {
+        setError(err);
+        setIsLoading(false);
+    }, []);
+
+    /**
+     * Handles successful map loading
+     */
+    const handleMapLoad = useCallback(() => {
+        setIsLoading(false);
+        setError(undefined);
+    }, []);
+
+    /**
+     * Memoized statistics data
      */
     const statisticsData = useMemo(() => ({
         clustersByCategory,
@@ -42,26 +66,6 @@ const MapPage: NextPage = () => {
         isLoading,
         error
     }), [clustersByCategory, hiddenCategories, isLoading, error]);
-
-    /**
-     * Handles map loading errors
-     * Updates error state and loading status
-     *
-     * @param err - The error object from the map component
-     */
-    const handleMapError = (err: Error) => {
-        setError(err);
-        setIsLoading(false);
-    };
-
-    /**
-     * Handles successful map loading
-     * Resets error state and updates loading status
-     */
-    const handleMapLoad = () => {
-        setIsLoading(false);
-        setError(undefined);
-    };
 
     /**
      * Handles page reload for error recovery
@@ -122,8 +126,8 @@ const MapPage: NextPage = () => {
 
                 {/* Interactive Map Component */}
                 <Map
-                    onClustersChange={setClustersByCategory}
-                    onHiddenCategoriesChange={setHiddenCategories}
+                    onClustersChange={handleClustersChange}
+                    onHiddenCategoriesChange={handleHiddenCategoriesChange}
                     onError={handleMapError}
                     onLoad={handleMapLoad}
                 />
