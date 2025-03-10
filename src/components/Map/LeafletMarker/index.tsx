@@ -29,12 +29,18 @@ export const CustomMarker = ({place}: CustomMarkerProps) => {
 
     const handleMarkerClick = useCallback(() => {
         if (!map) return
-        const currentZoom = map.getZoom()
-        const clampZoom = currentZoom < 14 ? 14 : currentZoom
-        map.setView(place.position, clampZoom, {
-            animate: true,
-            duration: 0.5
-        })
+        const currentCenter = map.getCenter()
+        const targetPos = Array.isArray(place.position) 
+            ? place.position 
+            : [place.position.lat, place.position.lng]
+        
+        // Only pan if the marker is not already centered
+        if (currentCenter.lat !== targetPos[0] || currentCenter.lng !== targetPos[1]) {
+            map.panTo(place.position, {
+                animate: true,
+                duration: 0.5
+            })
+        }
     }, [map, place.position])
 
     // some event for the inner popup cta

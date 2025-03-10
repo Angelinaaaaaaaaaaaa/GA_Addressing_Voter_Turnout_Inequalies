@@ -1,5 +1,5 @@
 import {LatLngExpression, Map} from 'leaflet'
-import {useCallback, useEffect, useMemo, useState} from 'react'
+import {useCallback, useEffect, useMemo, useState, useRef} from 'react'
 import debounce from 'lodash/debounce'
 
 import useLeafletWindow from '#components/Map/useLeafletWindow'
@@ -30,125 +30,111 @@ const useMarkerData = ({locations, map, viewportWidth, viewportHeight}: useMapDa
     const leafletWindow = useLeafletWindow()
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<Error>()
-
+    const hasInitialized = useRef(false)
+    const [visibleLocations, setVisibleLocations] = useState<PlacesType>([])
     const [allMarkersBoundCenter, setAllMarkersBoundCenter] = useState<allMarkerPosValues>({
         minZoom: AppConfig.minZoom - 5,
         centerPos: AppConfig.baseCenter,
     })
 
-    const [visibleLocations, setVisibleLocations] = useState<PlacesType>([])
-
-    // get bounds of all markers with error handling
+    // Calculate bounds for all markers
     const allMarkerBounds = useMemo(() => {
         if (!leafletWindow || !locations) return undefined
-
         try {
-            const coordsSum: LatLngExpression[] = locations.map(item => item.position)
-            return leafletWindow.latLngBounds(coordsSum)
+            return leafletWindow.latLngBounds(locations.map(item => item.position))
         } catch (err) {
             setError(err instanceof Error ? err : new Error('Failed to calculate marker bounds'))
             return undefined
         }
     }, [leafletWindow, locations])
 
-    // Initialize visible locations with all locations
-    useEffect(() => {
-        if (locations) {
-            setVisibleLocations(locations)
-            setIsLoading(false)
-        }
-    }, [locations])
+    // Group locations by category
+    const groupLocationsByCategory = useCallback((locs: PlacesType): Record<Category, PlacesType> => {
+        return locs.reduce<Record<Category, PlacesType>>((acc, location) => {
+            if (!location?.category) return acc
+            const category = location.category as Category
+            if (!acc[category]) acc[category] = []
+            acc[category].push(location)
+            return acc
+        }, {} as Record<Category, PlacesType>)
+    }, [])
 
-    // Debounced update visible locations function
+    // Update visible locations based on map bounds
     const updateVisibleLocations = useCallback(
         debounce(() => {
             if (!map || !locations) return
-
             try {
                 const bounds = map.getBounds()
-                const visible = locations.filter(location => bounds.contains(location.position))
-                setVisibleLocations(visible)
+                setVisibleLocations(locations.filter(location => bounds.contains(location.position)))
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('Failed to update visible locations'))
             }
-        }, 150),
+        }, 50),
         [map, locations]
     )
 
-    // Update visible locations when map moves
+    // Initialize locations and handle map events
     useEffect(() => {
         if (!map || !locations) return
 
-        map.on('moveend', updateVisibleLocations)
+        // Set initial visible locations
+        setVisibleLocations(locations)
+        
+        // Handle map updates
+        const handleUpdate = () => {
+            const bounds = map.getBounds()
+            setVisibleLocations(locations.filter(location => bounds.contains(location.position)))
+        }
+
+        map.on('moveend', handleUpdate)
+        map.on('zoomend', handleUpdate)
 
         return () => {
-            map.off('moveend', updateVisibleLocations)
-            updateVisibleLocations.cancel() // Cancel any pending debounced calls
+            map.off('moveend', handleUpdate)
+            map.off('zoomend', handleUpdate)
         }
-    }, [map, locations, updateVisibleLocations])
+    }, [map, locations])
 
-    const clustersByCategory = useMemo(() => {
-        if (!visibleLocations.length) return undefined
+    // Initial map setup
+    useEffect(() => {
+        if (!allMarkerBounds || !map || hasInitialized.current) return
 
         try {
-            // Group visible locations by category with validation
-            return visibleLocations.reduce<Record<Category, PlacesType>>((acc, location) => {
-                if (!location || !location.category) return acc
+            const newBounds = allMarkerBounds.pad(0.1)
+            map.fitBounds(newBounds, {
+                animate: false,
+                maxZoom: 8,
+                padding: [50, 50]
+            })
 
-                const category = location.category as Category
-                if (!acc[category]) {
-                    acc[category] = []
-                }
-                acc[category].push(location)
-                return acc
-            }, {} as Record<Category, PlacesType>)
-        } catch (err) {
-            setError(err instanceof Error ? err : new Error('Failed to group locations by category'))
-            return undefined
-        }
-    }, [visibleLocations])
+            setAllMarkersBoundCenter({
+                minZoom: Math.min(map.getBoundsZoom(newBounds), 8),
+                centerPos: [newBounds.getCenter().lat, newBounds.getCenter().lng],
+            })
 
-    // auto resize map to fit all markers on viewport change
-    useEffect(() => {
-        if (!allMarkerBounds || !leafletWindow || !map) return
-        if (!viewportWidth || !viewportHeight) return
-
-        let isSubscribed = true
-
-        const resizeMap = async () => {
-            try {
-                const el = map.invalidateSize()
-                if (!el) return
-
-                const newBounds = allMarkerBounds.pad(0.1) // Add 10% padding
-                map.fitBounds(newBounds)
-
-                if (isSubscribed) {
-                    setAllMarkersBoundCenter({
-                        minZoom: map.getBoundsZoom(newBounds),
-                        centerPos: [newBounds.getCenter().lat, newBounds.getCenter().lng],
-                    })
-                }
-            } catch (err) {
-                if (isSubscribed) {
-                    setError(err instanceof Error ? err : new Error('Failed to resize map'))
-                }
-            }
-        }
-
-        resizeMap()
-
-        return () => {
-            isSubscribed = false
-        }
-    }, [allMarkerBounds, leafletWindow, map, viewportWidth, viewportHeight])
-
-    // Cleanup on unmount
-    useEffect(() => {
-        return () => {
-            setError(undefined)
+            hasInitialized.current = true
             setIsLoading(false)
+        } catch (err) {
+            setError(err instanceof Error ? err : new Error('Failed to initialize map'))
         }
+    }, [allMarkerBounds, map])
+
+    // Handle viewport resize
+    useEffect(() => {
+        if (!map || !viewportWidth || !viewportHeight) return
+        map.invalidateSize()
+    }, [map, viewportWidth, viewportHeight])
+
+    // Calculate clusters by category
+    const clustersByCategory = useMemo(() => {
+        const locsToGroup = visibleLocations?.length ? visibleLocations : locations
+        return locsToGroup ? groupLocationsByCategory(locsToGroup) : undefined
+    }, [visibleLocations, locations, groupLocationsByCategory])
+
+    // Cleanup
+    useEffect(() => () => {
+        setError(undefined)
+        setIsLoading(false)
     }, [])
 
     return {clustersByCategory, allMarkersBoundCenter, isLoading, error}

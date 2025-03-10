@@ -203,10 +203,13 @@ const LeafletMapInner: React.FC<MapProps> = ({
     useEffect(() => {
         if (!allMarkersBoundCenter || !map) return
 
+        // Only initialize once on first load
+        if (map.getZoom() !== undefined && map.getZoom() > 0) return;
+
         const timer = setTimeout(() => {
             const moveEnd = () => {
                 map.off('moveend', moveEnd);
-                onLoad?.(); // Notify parent when map is fully initialized
+                onLoad?.();
             };
 
             try {

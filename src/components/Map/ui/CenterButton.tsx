@@ -34,11 +34,12 @@ export const CenterButton = ({center, zoom}: CenterButtonProps) => {
     const handleClick = useCallback(() => {
         if (!isTouched || !map) return
 
-        map.flyTo(center, zoom)
+        const currentZoom = map.getZoom();
+        map.flyTo(center, currentZoom);
         map.once('moveend', () => {
             setIsTouched(false)
         })
-    }, [map, isTouched, zoom, center])
+    }, [map, isTouched, center])
 
     return (
         <button
