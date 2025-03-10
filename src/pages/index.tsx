@@ -17,6 +17,8 @@ import {useState} from 'react';
 import NavMenu from '#components/common/NavMenu';
 import {AppConfig} from '#lib/AppConfig';
 
+import voteImg from '#lib/figures/vote1.webp';
+import gapImg from '#lib/figures/growing-racial_disparities.png';
 import dagImg from '#lib/figures/dag.png';
 import majorityRaceAllocationImg from '#lib/figures/majority_race_blue.png';
 import tauVsTotalImpactImg from '#lib/figures/tau_vs_total_impact.png';
@@ -30,6 +32,28 @@ const Home = () => {
 
     return (
         <div className="container mx-auto max-w-2xl p-3 max-md:max-w-none">
+            <header className="flex flex-col md:flex-row items-start mt-6 gap-4">
+            {/* Left Side: Title + Authors */}
+            <div className="flex flex-col">
+                <h1 className="text-5xl font-extrabold">Optimizing Voter Turnout</h1>
+                <h2 className="text-4xl font-bold mb-4">Data-Driven Resource Allocation in Georgia</h2>
+                
+                {/* Authors Section */}
+                <p className="text-lg">
+                <strong>Authors:</strong> Angelina Zhang (<a href="mailto:ruz039@ucsd.edu">ruz039@ucsd.edu</a>) ;
+                Cici Xu (<a href="mailto:xix015@ucsd.edu">xix015@ucsd.edu</a>)<br />
+                <strong>Mentor:</strong> Babak Salimi (<a href="mailto:bsalimi@ucsd.edu">bsalimi@ucsd.edu</a>)
+                </p>
+            </div>
+
+            {/* Right Side: Image */}
+            <img 
+                src={voteImg.src} 
+                alt="vote image" 
+                className="w-[950px] h-auto md:ml-8"
+            />
+            </header>
+
             <Head>
                 <title>Optimizing Voter Turnout: Data-Driven Resource Allocation in Georgia</title>
                 <meta
@@ -50,6 +74,7 @@ const Home = () => {
                     <h1 className="text-5xl font-extrabold">Optimizing Voter Turnout</h1>
                     <h2 className="mb-10 text-4xl font-bold">Data-Driven Resource Allocation in Georgia</h2>
                 </div>
+                <img src={voteImg.src} alt="vote image"style={{ width: '950px', height: 'auto' }} className="mb-4 mx-auto"/>
             </header>
 
             
@@ -71,6 +96,17 @@ const Home = () => {
                     Do you know that persistent disparities in voter turnout across racial and socioeconomic groups continue to challenge 
                     democratic participation? While various initiatives aim to increase overall voter engagement, inequities in <strong>resource allocation</strong> disproportionately affect underserved communities. 
                 </p>
+                <img 
+                    src={gapImg.src} 
+                    alt="Growing voter turnout gap image" 
+                    style={{ width: '800px', height: 'auto' }} 
+                    className="mb-4 mx-auto" 
+                />
+
+                <p className="text-center text-sm">
+                Source:{' '} <a href="https://www.brennancenter.org/our-work/research-reports/growing-racial-disparities-voter-turnout-2008-2022" target="_blank" rel="noopener noreferrer"> Brennan Center for Justice</a>
+                </p>
+
                 <p className="mb-4">
                     <strong>What if smarter polling station placement could significantly boost voter turnout — especially in communities that have been historically underserved?</strong> 
                     {' '}Our project uses <strong>Structural Causal Models (SCMs)</strong> and <strong>Mixed Integer Programming (MIP)</strong> to strategically optimize polling station placement aiming to:
@@ -141,7 +177,7 @@ const Home = () => {
                 </p>
                 <img 
                     src={dagImg.src} 
-                    alt="Description of the image" 
+                    alt="causal dag" 
                     style={{ width: '450px', height: 'auto' }} 
                     className="mb-4 mx-auto" 
                 />
