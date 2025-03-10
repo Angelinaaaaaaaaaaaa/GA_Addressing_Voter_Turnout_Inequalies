@@ -17,6 +17,7 @@ import {useState} from 'react';
 import NavMenu from '#components/common/NavMenu';
 import {AppConfig} from '#lib/AppConfig';
 
+import dagImg from '#lib/figures/dag.png';
 import majorityRaceAllocationImg from '#lib/figures/majority_race_blue.png';
 import tauVsTotalImpactImg from '#lib/figures/tau_vs_total_impact.png';
 import spatialDistributionMapsImg from '#lib/figures/plot_maps.png';
@@ -51,17 +52,39 @@ const Home = () => {
                 </div>
             </header>
 
+            
+            {/* Authors Section */}
+            <section>
+                <p>
+                    <strong>Authors:</strong> Angelina Zhang (<a href="mailto:ruz039@ucsd.edu">ruz039@ucsd.edu</a>) ;
+                    Cici Xu (<a href="mailto:xix015@ucsd.edu">xix015@ucsd.edu</a>)   
+                    {'   '}<strong>Mentor:</strong> Babak Salimi (<a href="mailto:bsalimi@ucsd.edu">bsalimi@ucsd.edu</a>)
+                </p>
+            </section>
+
+
+
             {/* Background Section */}
             <section className="mb-8">
-                <h3 className="mb-4 text-2xl font-bold">Executive Summary</h3>
+                <h3 className="mb-4 text-2xl font-bold">Introduction</h3>
                 <p className="mb-4">
-                    Persistent disparities in voter turnout across racial and socioeconomic groups continue to challenge
-                    democratic participation. While various initiatives aim to increase overall voter engagement,
-                    inequities in <strong>resource allocation</strong> disproportionately affect underserved
-                    communities. This research project addresses these challenges by employing <strong>Structural Causal
-                    Models (SCMs)</strong> and <strong>Mixed Integer Programming (MIP)</strong> to optimize polling
-                    station placement in Georgia, with dual objectives of maximizing overall turnout while reducing
-                    racial disparities.
+                    Do you know that persistent disparities in voter turnout across racial and socioeconomic groups continue to challenge 
+                    democratic participation? While various initiatives aim to increase overall voter engagement, inequities in <strong>resource allocation</strong> disproportionately affect underserved communities. 
+                </p>
+                <p className="mb-4">
+                    <strong>What if smarter polling station placement could significantly boost voter turnout — especially in communities that have been historically underserved?</strong> 
+                    Our project uses <strong>Structural Causal Models (SCMs)</strong> and <strong>Mixed Integer Programming (MIP)</strong> to strategically optimize polling station placement — aiming to:
+                </p>
+                <ul className="mb-4 list-disc pl-5">
+                    <li>✅ Maximize overall voter turnout.</li>
+                    <li>✅ Reduce racial disparities in voting access.</li>
+                    <li>✅ Operate within a fixed budget.</li>
+                </ul>
+                <p className="mb-4">
+                    By combining election data, census demographics, and fairness constraints, we build models that answer a critical question:
+                </p>
+                <p className="mb-4">
+                    👉 <strong>Where should polling stations go to make the most impact — both in turnout and equity?</strong>
                 </p>
             </section>
 
@@ -117,6 +140,12 @@ const Home = () => {
                     unit as a distinct node in the causal graph. This granular approach enables precise analysis of
                     decision impacts across different communities.
                 </p>
+                <img 
+                    src={dagImg.src} 
+                    alt="Description of the image" 
+                    style={{ width: '400px', height: 'auto' }} 
+                    className="mb-4 mx-auto" 
+                />
             </section>
 
             {/* Results Section */}
