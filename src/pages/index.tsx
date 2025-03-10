@@ -96,7 +96,7 @@ const Home = () => {
                 <img 
                     src={voteImg.src} 
                     alt="vote image" 
-                    style={{ width: '950px', height: 'auto' }} 
+                    style={{ width: '880px', height: 'auto' }} 
                     className="mb-4 mx-auto md:w-1/2"
                 />
             </header>
@@ -111,7 +111,7 @@ const Home = () => {
                 <img 
                     src={gapImg.src} 
                     alt="Growing voter turnout gap image" 
-                    style={{ width: '800px', height: 'auto' }} 
+                    style={{ width: '700px', height: 'auto' }} 
                     className="mb-4 mx-auto" 
                 />
 
