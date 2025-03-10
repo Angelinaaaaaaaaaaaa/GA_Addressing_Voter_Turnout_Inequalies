@@ -73,18 +73,18 @@ const Home = () => {
                 </p>
                 <p className="mb-4">
                     <strong>What if smarter polling station placement could significantly boost voter turnout — especially in communities that have been historically underserved?</strong> 
-                    Our project uses <strong>Structural Causal Models (SCMs)</strong> and <strong>Mixed Integer Programming (MIP)</strong> to strategically optimize polling station placement — aiming to:
+                    {' '}Our project uses <strong>Structural Causal Models (SCMs)</strong> and <strong>Mixed Integer Programming (MIP)</strong> to strategically optimize polling station placement aiming to:
                 </p>
                 <ul className="mb-4 list-disc pl-5">
-                    <li>✅ Maximize overall voter turnout.</li>
-                    <li>✅ Reduce racial disparities in voting access.</li>
-                    <li>✅ Operate within a fixed budget.</li>
+                    <li>Maximize overall voter turnout.</li>
+                    <li>Reduce racial disparities in voting access.</li>
+                    <li>Operate within a fixed budget.</li>
                 </ul>
                 <p className="mb-4">
                     By combining election data, census demographics, and fairness constraints, we build models that answer a critical question:
                 </p>
                 <p className="mb-4">
-                    👉 <strong>Where should polling stations go to make the most impact — both in turnout and equity?</strong>
+                     <strong>Where should polling stations go to make the most impact — both in turnout and equity?</strong>
                 </p>
             </section>
 
@@ -128,11 +128,10 @@ const Home = () => {
                     </li>
                     <li>
                         <strong>Decision Variables (X)</strong>: Features influencing allocation decisions but not
-                        legally protected
+                        legally protected (e.g., tweets, contribution, unemployment rate, number of polling stations)
                     </li>
                     <li>
-                        <strong>Outcome Measures (Y)</strong>: Key performance indicators including voter turnout and
-                        equity metrics
+                        <strong>Outcome Measures (Y)</strong>: Key performance indicators including voter turnout 
                     </li>
                 </ul>
                 <p className="mb-4">
@@ -143,7 +142,7 @@ const Home = () => {
                 <img 
                     src={dagImg.src} 
                     alt="Description of the image" 
-                    style={{ width: '400px', height: 'auto' }} 
+                    style={{ width: '450px', height: 'auto' }} 
                     className="mb-4 mx-auto" 
                 />
             </section>
@@ -203,6 +202,7 @@ const Home = () => {
                 <h4 className="mb-3 text-xl font-semibold">Geographic Distribution Analysis</h4>
                 <img
                     src={spatialDistributionMapsImg.src}
+                    style={{ width: '1100px', height: 'auto' }} 
                     alt="Spatial Distribution of Polling Interventions"
                     className="w-full"
                     onError={() => console.error('Failed to load Spatial Distribution Maps image')}
