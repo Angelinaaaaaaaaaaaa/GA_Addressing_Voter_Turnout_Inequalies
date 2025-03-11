@@ -250,7 +250,7 @@ const Home = () => {
             <section className="mb-8">
                 <h3 className="mb-4 text-2xl font-bold">Key Findings</h3>
                 <p className="mb-4">
-                    Our analysis examines the relationship between fairness constraints (τ) and their impact on both
+                    Our analysis examines the relationship between fairness constraints (<InlineMath math="\tau" />) and their impact on both
                     racial equity and overall voter turnout. The findings reveal important trade-offs between fairness
                     and total turnout impact.
                 </p>
@@ -272,7 +272,7 @@ const Home = () => {
                     />
                 </div>
                 <p className="mb-4">
-                    The analysis above demonstrates how varying the fairness constraint (τ) affects both intervention
+                    The analysis above demonstrates how varying the fairness constraint (<InlineMath math="\tau" />) affects both intervention
                     allocation and overall turnout impact.
                 </p>
 
@@ -280,19 +280,19 @@ const Home = () => {
                     <li>
                         <strong>Left Panel</strong>: Intervention allocation patterns by county majority race
                         <ul className="list-disc pl-5">
-                            <li>Increasing τ (stricter fairness) leads to more equitable distribution across racial
+                            <li>Increasing <InlineMath math="\tau" /> (stricter fairness) leads to more equitable distribution across racial
                                 groups
                             </li>
-                            <li>Lower τ values result in disproportionate allocation to white-majority counties</li>
-                            <li>Higher τ values enforce more balanced distribution</li>
+                            <li>Lower <InlineMath math="\tau" /> values result in disproportionate allocation to white-majority counties</li>
+                            <li>Higher <InlineMath math="\tau" /> values enforce more balanced distribution</li>
                         </ul>
                     </li>
                     <li>
                         <strong>Right Panel</strong>: Impact analysis by fairness constraint
                         <ul className="list-disc pl-5">
-                            <li>Total turnout impact increases with τ, with varying rates of change</li>
-                            <li>Significant impact gains observed when relaxing tight constraints (low τ)</li>
-                            <li>Diminishing returns observed around τ = 0.43</li>
+                            <li>Total turnout impact increases with <InlineMath math="\tau" />, with varying rates of change</li>
+                            <li>Significant impact gains observed when relaxing tight constraints (low <InlineMath math="\tau" />)</li>
+                            <li>Diminishing returns observed around <InlineMath math="\tau" /> = 0.43</li>
                         </ul>
                     </li>
                 </ul>
@@ -321,7 +321,7 @@ const Home = () => {
                         considerations
                     </li>
                     <li>
-                        <strong>Fairness-Constrained (τ = 0.38)</strong>: Balanced approach considering both impact and
+                        <strong>Fairness-Constrained (<InlineMath math="\tau" /> = 0.38)</strong>: Balanced approach considering both impact and
                         equity
                     </li>
                 </ul>
@@ -459,7 +459,7 @@ const Home = () => {
                                 <td className="border border-gray-300 px-4 py-2">9.3306</td>
                             </tr>
                             <tr>
-                                <td className="border border-gray-300 px-4 py-2 font-medium">τ = 0.38</td>
+                                <td className="border border-gray-300 px-4 py-2 font-medium"><InlineMath math="\tau" /> = 0.38</td>
                                 <td className="border border-gray-300 px-4 py-2">42.1366</td>
                                 <td className="border border-gray-300 px-4 py-2">61.7695</td>
                                 <td className="border border-gray-300 px-4 py-2">0.3282</td>
@@ -469,7 +469,7 @@ const Home = () => {
                                 <td className="border border-gray-300 px-4 py-2">4.2802</td>
                             </tr>
                             <tr>
-                                <td className="border border-gray-300 px-4 py-2 font-medium">τ = 0.39</td>
+                                <td className="border border-gray-300 px-4 py-2 font-medium"><InlineMath math="\tau" /> = 0.39</td>
                                 <td className="border border-gray-300 px-4 py-2">35.8717</td>
                                 <td className="border border-gray-300 px-4 py-2">67.9293</td>
                                 <td className="border border-gray-300 px-4 py-2">0.3907</td>
@@ -503,7 +503,7 @@ const Home = () => {
                 <h4 className="mb-3 text-xl font-semibold">Key Findings</h4>
                 <ul className="mb-4 list-disc pl-5">
                     <li>
-                        Stricter fairness constraints (τ) achieve more equitable distribution while maintaining
+                        Stricter fairness constraints (<InlineMath math="\tau" />) achieve more equitable distribution while maintaining
                         near-optimal turnout impact
                     </li>
                     <li>
