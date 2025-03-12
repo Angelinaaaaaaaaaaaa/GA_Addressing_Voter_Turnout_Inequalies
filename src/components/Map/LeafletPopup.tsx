@@ -72,15 +72,15 @@ const LeafletPopup = ({
                         <p className="m-0 text-secondary">Polling Place Status: {polling_place_status}</p>
                         <p className="m-0 text-secondary">Classification: {classification}</p>
                         {/* todo: new component for button group */}
-                        <div className="mt-6 flex flex-row justify-between gap-2 p-2">
+                        <div className="mt-6 flex flex-row justify-end gap-2 p-2">
                             <Button className="gap-2 bg-secondary text-white" onClick={() => handlePopupClose()} small>
                                 <ChevronLeft size={AppConfig.ui.menuIconSize}/>
                                 Close
                             </Button>
-                            <Button className="gap-2 bg-primary text-white" onClick={() => handleOpenLocation()} small>
-                                Open
-                                <ChevronRight size={AppConfig.ui.menuIconSize}/>
-                            </Button>
+                            {/*<Button className="gap-2 bg-primary text-white" onClick={() => handleOpenLocation()} small>*/}
+                            {/*    Open*/}
+                            {/*    <ChevronRight size={AppConfig.ui.menuIconSize}/>*/}
+                            {/*</Button>*/}
                         </div>
                     </div>
                 </div>
